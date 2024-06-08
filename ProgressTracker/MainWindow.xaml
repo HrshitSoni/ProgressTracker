@@ -7,6 +7,32 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black"/>
+                <GradientStop Color="#FFED8DFA" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="580"/>
+        </Grid.ColumnDefinitions>
+        <ScrollBar Grid.Column="1" Background="#660033"/>
+        <ListView Grid.Column="0" Width="200">
+            <ListView.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FFED8DFA" Offset="1"/>
+                </LinearGradientBrush>
+            </ListView.Background>
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Background="White" Width="191" >
+                <Button Width="50" Height="42">
+                    <Image Source="C:\Users\sonih\Downloads\3linesMenu2.jpg" Stretch="Fill"/>
+                </Button>
+                <TextBlock Background="Black" Width="142" Height="42" Margin="0,0,0,0" Text ="Applications" Foreground="AliceBlue" FontSize="25" TextAlignment="Center"/>
+            </StackPanel>
+            
+        </ListView>
     </Grid>
 </Window>
