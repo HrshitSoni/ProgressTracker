@@ -5,34 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProgressTracker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="Black"/>
-                <GradientStop Color="#FFED8DFA" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+        Title="Progress Tracker" Height="550" Width="800" Icon="pack://application:,,,/Images/MainIcon.ico">
+    <Window.Resources>
+        <!-- Define a common LinearGradientBrush for reuse -->
+        <LinearGradientBrush x:Key="BackgroundBrush" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="Black"/>
+            <GradientStop Color="#FFED8DFA" Offset="1"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+    <Grid Background="{StaticResource BackgroundBrush}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="20"/>
-            <ColumnDefinition Width="580"/>
+            <ColumnDefinition x:Name="ListViewColumn" Width="200"/>
+            <ColumnDefinition x:Name ="ScrollBarColumn"  Width="20"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
+
         <ScrollBar Grid.Column="1" Background="#660033"/>
-        <ListView Grid.Column="0" Width="200">
-            <ListView.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black"/>
-                    <GradientStop Color="#FFED8DFA" Offset="1"/>
-                </LinearGradientBrush>
-            </ListView.Background>
-            <StackPanel Grid.Column="0" Orientation="Horizontal" Background="White" Width="191" >
-                <Button Width="50" Height="42">
-                    <Image Source="C:\Users\sonih\Downloads\3linesMenu2.jpg" Stretch="Fill"/>
-                </Button>
-                <TextBlock Background="Black" Width="142" Height="42" Margin="0,0,0,0" Text ="Applications" Foreground="AliceBlue" FontSize="25" TextAlignment="Center"/>
-            </StackPanel>
-            
+
+        <ListView x:Name="AppList" Grid.Column="0" Width="200" Background="{StaticResource BackgroundBrush}">
+            <ListViewItem>
+                <StackPanel Orientation="Horizontal" Background="White" Width="191">
+                    <Button x:Name="MenuButton" Width="50" Height="42" Click="MenuButton_Click">
+                        <Image Source="pack://application:,,,/Images/3LineMenuIcon.png" Stretch="Fill"/>
+                    </Button>
+                    <TextBlock Background="Black" Width="142" Height="42" 
+                               Text="Applications" Foreground="AliceBlue" 
+                               FontSize="25" TextAlignment="Center"/>
+                </StackPanel>
+            </ListViewItem>
         </ListView>
     </Grid>
 </Window>

@@ -16,9 +16,24 @@ namespace ProgressTracker
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool isCollapsed = false;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(isCollapsed == false)
+            {
+                ListViewColumn.Width = new GridLength(57);
+                isCollapsed = true;
+            }
+            else
+            {
+                ListViewColumn.Width = new GridLength(200);
+                isCollapsed = false;
+            }
         }
     }
 }
