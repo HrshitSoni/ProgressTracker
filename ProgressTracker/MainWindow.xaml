@@ -22,17 +22,39 @@
 
         <ScrollBar Grid.Column="1" Background="#660033"/>
 
-        <ListView x:Name="AppList" Grid.Column="0" Width="200" Background="{StaticResource BackgroundBrush}">
-            <ListViewItem>
-                <StackPanel Orientation="Horizontal" Background="White" Width="191">
-                    <Button x:Name="MenuButton" Width="50" Height="42" Click="MenuButton_Click">
-                        <Image Source="pack://application:,,,/Images/3LineMenuIcon.png" Stretch="Fill"/>
-                    </Button>
-                    <TextBlock Background="Black" Width="142" Height="42" 
-                               Text="Applications" Foreground="AliceBlue" 
-                               FontSize="25" TextAlignment="Center"/>
-                </StackPanel>
-            </ListViewItem>
-        </ListView>
+        <StackPanel Grid.Column="0" Height="50" Orientation="Horizontal" Background="Transparent" Width="191" VerticalAlignment="Top">
+            <Button x:Name="MenuButton" Width="50" Height="42" Click="MenuButton_Click">
+                <Image Source="pack://application:,,,/Images/3LineMenuIcon.png" Stretch="Fill"/>
+            </Button>
+            <TextBlock Background="Transparent" Width="142" Height="42" 
+                    Text="Applications" Foreground="White" 
+                    FontSize="25" TextAlignment="Center"/>
+        </StackPanel>
+
+        <ListView x:Name="AppList" Grid.Column="0" Width="200" Background="{StaticResource BackgroundBrush}" Margin="0,50,0,0" BorderBrush="Transparent"/>
+
+        <StackPanel x:Name="EditBtnPnl" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" Background="Transparent" Height="70" Width="100" Orientation="Vertical" Margin="0,30,30,0" HorizontalAlignment="Right">
+            <Button x:Name="AddBtn" Content="Add" FontSize="20" FontWeight="SemiBold"  Height="30" Background="Transparent" Foreground ="White" BorderBrush="Transparent" ></Button>
+            <Button x:Name="RemoveBtn" Content="Remove" Height="30" VerticalAlignment="Bottom" Margin="0,10,0,0" FontSize="20" FontWeight="SemiBold" Foreground="White" Background="Transparent" BorderBrush="Transparent"></Button>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!-- Time StackPanel -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock x:Name="HourText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock Height="100" Width="18" Background="Transparent" Margin="5" Text=":" FontSize="70" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock x:Name="MinutesText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock Height="100" Width="18" Background="Transparent" Margin="5" Text=":" FontSize="70" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock x:Name="SecondsText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+            </StackPanel>
+            <!-- Labels StackPanel -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <TextBlock Height="30" Width="100" Background="Transparent" Text="Hrs" TextAlignment="Center"  FontSize="25" FontWeight="Bold"/>
+                <TextBlock Height="30" Width="18" Background="Transparent" Margin="5"/>
+                <TextBlock Height="30" Width="100" Background="Transparent" Text="Mins" TextAlignment="Center"  FontSize="25" FontWeight="Bold"/>
+                <TextBlock Height="30" Width="18" Background="Transparent" Margin="5"/>
+                <TextBlock Height="30" Width="100" Background="Transparent" Text="Secs" TextAlignment="Center" FontSize="25" FontWeight="Bold"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

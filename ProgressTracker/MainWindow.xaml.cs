@@ -26,7 +26,7 @@ namespace ProgressTracker
         {
             if(isCollapsed == false)
             {
-                ListViewColumn.Width = new GridLength(57);
+                ListViewColumn.Width = new GridLength(53);
                 isCollapsed = true;
             }
             else
