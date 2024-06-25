@@ -1,13 +1,6 @@
-﻿using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace ProgressTracker
 {
@@ -22,7 +15,7 @@ namespace ProgressTracker
             InitializeComponent();
         }
 
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        private void MenuButton_ClicK(object sender, RoutedEventArgs e)
         {
             if(isCollapsed == false)
             {
@@ -34,6 +27,11 @@ namespace ProgressTracker
                 ListViewColumn.Width = new GridLength(200);
                 isCollapsed = false;
             }
+        }
+
+        private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }
