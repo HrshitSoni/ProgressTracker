@@ -13,15 +13,7 @@ namespace ProgressTrackerLibrary.Models
         public int id { get; set; }
         public required string appName{ get; set; }
         public required string appLogoPath { get; set; }
-        public TimeSpan startTime { get; set; }
-        public TimeSpan endTime { get; set; }
+        public TimeSpan activeTime { get; set; }
         public required DayOfWeek dayAppUsed { get; set; }
-
-        public TimeSpan CalculateTotalTime()
-        {
-            TimeSpan totalTime = endTime - startTime;
-
-           return totalTime;
-        }
-    }
+    } 
 }
