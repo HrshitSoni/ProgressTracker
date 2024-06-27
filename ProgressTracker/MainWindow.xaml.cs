@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,21 +15,20 @@ namespace ProgressTracker
     public partial class MainWindow : Window
     {
         private bool isCollapsed = false;
-        private static List<Button> appList = new List<Button>();
+        private static ObservableCollection<Button> appList = new ObservableCollection<Button>();
 
         public MainWindow()
         {
             InitializeComponent();
-            //  DataContext = this;
+            DataContext = this;
 
-            InitializeAppList();
+            RefreshAppList();
         }
 
-        private void InitializeAppList()
+        private void RefreshAppList()
         {
             AppList.ItemsSource = null;
             AppList.ItemsSource = appList;
-           
         }
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
@@ -47,7 +47,7 @@ namespace ProgressTracker
         //TODO- bind image and name with the application name
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Name of the application 
+            // Name of the application that is added 
             TextBlock AppNameTextBlock = new TextBlock
             {
                 Height = 42,
@@ -86,11 +86,21 @@ namespace ProgressTracker
                 Background = new SolidColorBrush(Colors.Transparent),
                 Content = panel,
                 BorderBrush = new SolidColorBrush(Colors.Transparent),
+                
             };
 
             appList.Add(AppButton);
+            
+            RefreshAppList();
+        }
 
-            InitializeAppList();
+        private void RemoveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)AppList.SelectedItem;
+
+            appList.Remove(button);
+
+            RefreshAppList();
         }
     }
 }

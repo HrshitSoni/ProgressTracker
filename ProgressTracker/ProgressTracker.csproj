@@ -10,11 +10,13 @@
 
   <ItemGroup>
     <None Remove="Images\3LineMenuIcon.png" />
+    <None Remove="Images\GraphImage.jpg" />
     <None Remove="Images\MainIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\3LineMenuIcon.png" />
+    <Resource Include="Images\GraphImage.jpg" />
     <Resource Include="Images\MainIcon.ico" />
   </ItemGroup>
 
