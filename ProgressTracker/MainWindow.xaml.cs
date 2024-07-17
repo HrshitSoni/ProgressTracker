@@ -1,17 +1,15 @@
 ﻿using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml;
-
+using System.Windows.Media.Imaging;
+using Microsoft.VisualBasic;
+using Microsoft.Win32;
+using ProgressTrackerLibrary.Models;
 
 namespace ProgressTracker
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private bool isCollapsed = false;
@@ -20,19 +18,20 @@ namespace ProgressTracker
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = this;
+            DataContext = appList;
 
             RefreshAppList();
+            AssignDayToUI();
         }
 
         private void RefreshAppList()
         {
-            AppList.ItemsSource = null;
             AppList.ItemsSource = appList;
         }
+
         private void MenuButton_Click(object sender, RoutedEventArgs e)
         {
-            if(isCollapsed == false)
+            if (isCollapsed == false)
             {
                 ListViewColumn.Width = new GridLength(53);
                 isCollapsed = true;
@@ -44,7 +43,6 @@ namespace ProgressTracker
             }
         }
 
-        //TODO- bind image and name with the application name
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             // Name of the application that is added 
@@ -86,21 +84,35 @@ namespace ProgressTracker
                 Background = new SolidColorBrush(Colors.Transparent),
                 Content = panel,
                 BorderBrush = new SolidColorBrush(Colors.Transparent),
-                
             };
 
             appList.Add(AppButton);
-            
-            RefreshAppList();
         }
+
 
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
-            var button = (Button)AppList.SelectedItem;
+            if (AppList.SelectedItem != null)
+            {
+                var button = (Button)AppList.SelectedItem;
+                appList.Remove(button);
+             
+            }
+            else
+            {
+                MessageBox.Show("Please select an item to remove. You can select item by right clicking on it","Error");
+            }
+        }
 
-            appList.Remove(button);
+        private void AppButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("This method is not implemented yet");
+        }
 
-            RefreshAppList();
+        private void AssignDayToUI()
+        {
+            DayOfWeek day = DateAndTime.Today.DayOfWeek;
+            DayNameTextBox.Text = day.ToString();
         }
     }
 }
