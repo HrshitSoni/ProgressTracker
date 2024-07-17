@@ -8,6 +8,9 @@ namespace ProgressTrackerLibrary.DatabasePopulator
 {
     public class FileConnector
     {
-        private readonly string appFile = "AppFile.csv";
+        private const string appFile = "AppFile.csv";
+        private const string appLogoFile = "AppLogoFile.csv";
+        
+        
     }
 }

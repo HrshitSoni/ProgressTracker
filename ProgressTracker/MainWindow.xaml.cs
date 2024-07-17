@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using ProgressTrackerLibrary.Models;
+using ProgressTrackerLibrary.HelperMethods;
 
 namespace ProgressTracker
 {
@@ -44,6 +45,14 @@ namespace ProgressTracker
         }
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // Opening the app dialog box
+            ExtensionMethods.OpenAppsDialogBox();
+
+
+        }
+        
+        private void LoadWindow()
         {
             // Name of the application that is added 
             TextBlock AppNameTextBlock = new TextBlock
@@ -88,7 +97,6 @@ namespace ProgressTracker
 
             appList.Add(AppButton);
         }
-
 
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
