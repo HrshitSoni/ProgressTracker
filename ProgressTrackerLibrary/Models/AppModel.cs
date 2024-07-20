@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Navigation;
+using System.Drawing;
 
 namespace ProgressTrackerLibrary.Models
 {
@@ -12,7 +12,7 @@ namespace ProgressTrackerLibrary.Models
     {
         public int id { get; set; }
         public required string appName{ get; set; }
-        public required string appLogoPath { get; set; }
+        public  string appLogoPath { get; set; }
         public TimeSpan activeTime { get; set; }
     } 
 }

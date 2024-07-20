@@ -17,8 +17,6 @@
         <SolidColorBrush x:Key="HoverOverBackgroundBrush" Color="LightBlue" Opacity="0.5"/>
         <SolidColorBrush x:Key="HoverOverBorderBrush" Color="LightBlue" Opacity="1"/>
 
-        <!-- Defining a custom style for buttons -->
-
     </Window.Resources>
 
     <!-- Dividing the whole Form in 3 Columns -->

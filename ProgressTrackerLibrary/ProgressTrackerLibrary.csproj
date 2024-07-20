@@ -11,4 +11,8 @@
     <Folder Include="DataFiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common" Version="8.0.7" />
+  </ItemGroup>
+
 </Project>
