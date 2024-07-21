@@ -7,11 +7,15 @@ namespace ProgressTrackerLibrary.Database
 {
     public static class FileConnectorHelper
     {
+        // These are extension methods 
+
+        // Location of the file in the pc
         public static string FullFilePath(this string fileName)
         {
             return $"{ConfigurationManager.AppSettings["filePath"]}\\{fileName}";
         }
 
+        // Loading the file if it exits otherwise create one
         public static List<string> LoadFile(this string file)
         {
             if (!File.Exists(file))
@@ -23,6 +27,7 @@ namespace ProgressTrackerLibrary.Database
                 return File.ReadAllLines(file).ToList();
             }
         }
+
 
         private static void SaveToAppFile(this List<AppModel> apps, string fileName)
         {

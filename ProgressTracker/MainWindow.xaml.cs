@@ -55,7 +55,7 @@ namespace ProgressTracker
         {
             // Opening the app dialog box
             var app = HelpingMethods.OpenAppsDialogBox();
-
+            
             // Adding the app to the Window/Ui
             LoadWindow(app);
         }
@@ -86,7 +86,8 @@ namespace ProgressTracker
             };
 
             // Extracting Image from .exe file
-            var bitmap = HelpingMethods.GetImage(app.appLogoPath);
+            string filePath = app.appLogoPath;
+            var bitmap = filePath.GetImage();
             // MemoryStream is a class that uses unmanaged resources (memory), which need to be released when the stream is no longer needed.
             using (MemoryStream memory = new MemoryStream()) // This line creates a new MemoryStream object, which is a stream of bytes stored in memory. It is used here to temporarily store the image data.
             {

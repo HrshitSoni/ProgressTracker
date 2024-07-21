@@ -42,7 +42,7 @@ namespace ProgressTrackerLibrary.HelperMethods
 
 
         // Extracting Image from .exe file
-        public static Bitmap GetImage(string path)
+        public static Bitmap GetImage(this string path)
         {
             Icon icon = Icon.ExtractAssociatedIcon(path);
 
