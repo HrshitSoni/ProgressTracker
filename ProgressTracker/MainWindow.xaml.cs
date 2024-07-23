@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using ProgressTrackerLibrary.Models;
 using ProgressTrackerLibrary.HelperMethods;
+using ProgressTrackerLibrary.DatabasePopulator;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Drawing;
@@ -54,10 +55,21 @@ namespace ProgressTracker
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             // Opening the app dialog box
-            var app = HelpingMethods.OpenAppsDialogBox();
-            
+            var app = HelpingMethods.OpenAppsDialogBox_AddApp();
+
+            // so when i add a app or select a app i want to first add that into my data base 
+            //then extract each app from it and load it in the form 
+
+            //also i think loading app should be in different method than add btn because we want to load app every time//
+
+            FileConnector.SaveToAppFile(app);
+
+
+
+
             // Adding the app to the Window/Ui
             LoadWindow(app);
+
         }
         
         // Method to load the window
@@ -88,18 +100,21 @@ namespace ProgressTracker
             // Extracting Image from .exe file
             string filePath = app.appLogoPath;
             var bitmap = filePath.GetImage();
-            // MemoryStream is a class that uses unmanaged resources (memory), which need to be released when the stream is no longer needed.
-            using (MemoryStream memory = new MemoryStream()) // This line creates a new MemoryStream object, which is a stream of bytes stored in memory. It is used here to temporarily store the image data.
+
+
+            // Converting bitmap to bitmapImageSource
+            using (MemoryStream memory = new MemoryStream()) 
             {
-                bitmap.Save(memory, ImageFormat.Png); // Saving the image to the memory
-                memory.Position = 0;// resets the memory position to 0 to get ready for the read
-                BitmapImage bitmapImage = new BitmapImage(); // creating a new bitmap image
-                bitmapImage.BeginInit(); // begin initialization 
-                bitmapImage.StreamSource = memory; // set the stream source to memory stream
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad; // cache the image data on load
-                bitmapImage.EndInit(); // End initialization
-                appLogo.Source = bitmapImage; // setting the source to bitmap image;
+                bitmap.Save(memory, ImageFormat.Png); 
+                memory.Position = 0;
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit(); 
+                bitmapImage.StreamSource = memory; 
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad; 
+                bitmapImage.EndInit(); 
+                appLogo.Source = bitmapImage; 
             }
+
 
             // Panel that holds both image and Name textBlock
             StackPanel panel = new StackPanel
@@ -108,8 +123,10 @@ namespace ProgressTracker
                 Background = new SolidColorBrush(Colors.Transparent),
             };
 
+
             panel.Children.Add(appLogo);
             panel.Children.Add(AppNameTextBlock);
+
 
             // Lastly its a button so user clicks where ever it will trigger 
             Button AppButton = new Button
@@ -135,7 +152,7 @@ namespace ProgressTracker
             }
             else
             {
-                MessageBox.Show("Please select an item to remove. You can select item by right clicking on it","Error");
+                MessageBox.Show("Please select an app to remove. You can select app by right clicking on it","Error");
             }
         }
 

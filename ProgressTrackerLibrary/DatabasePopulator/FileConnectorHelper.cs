@@ -1,5 +1,6 @@
 ﻿using ProgressTrackerLibrary.Models;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Media;
 
@@ -12,7 +13,9 @@ namespace ProgressTrackerLibrary.Database
         // Location of the file in the pc
         public static string FullFilePath(this string fileName)
         {
-            return $"{ConfigurationManager.AppSettings["filePath"]}\\{fileName}";
+            string basePath = $"{ConfigurationManager.AppSettings["filePath"]}";
+           // Trace.WriteLine(basePath);
+            return Path.Combine(basePath, fileName);
         }
 
         // Loading the file if it exits otherwise create one
@@ -29,7 +32,7 @@ namespace ProgressTrackerLibrary.Database
         }
 
 
-        private static void SaveToAppFile(this List<AppModel> apps, string fileName)
+        public static void SaveAppListToFile(this List<AppModel> apps, string fileName)
         {
             List<string> newLine = new List<string>();
 
@@ -41,7 +44,7 @@ namespace ProgressTrackerLibrary.Database
             File.WriteAllLines(fileName.FullFilePath(), newLine);
         }
 
-        public static List<AppModel> LoadApplication(this List<string> file)
+        public static List<AppModel> ConvertToAppModel(this List<string> file)
         {
             List<AppModel> apps = new List<AppModel>();
              
@@ -53,7 +56,7 @@ namespace ProgressTrackerLibrary.Database
                     id = int.Parse(columns[0]),
                     appName = columns[1],
                     appLogoPath = columns[2],
-                    activeTime = TimeSpan.Parse(columns[3])
+                    activeTime = columns[3]
                 };
 
                 apps.Add(app);

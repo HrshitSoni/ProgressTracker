@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProgressTrackerLibrary.Database;
+using ProgressTrackerLibrary.Models;
+
 
 namespace ProgressTrackerLibrary.DatabasePopulator
 {
-    public class FileConnector
+    public static class FileConnector
     {
         private const string appFile = "AppFile.csv";
-        private const string appLogoFile = "AppLogoFile.csv";
         
-        
+        public static void SaveToAppFile(AppModel app)
+        {
+            List<AppModel> appList = appFile.FullFilePath().LoadFile().ConvertToAppModel();
+
+            appList.Add(app);
+
+            appList.SaveAppListToFile(appFile);
+        }
     }
 }

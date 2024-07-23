@@ -13,7 +13,7 @@ namespace ProgressTrackerLibrary.HelperMethods
     public static class HelpingMethods
     {
         // Opening .exe files dialog box
-        public static AppModel  OpenAppsDialogBox()
+        public static AppModel  OpenAppsDialogBox_AddApp()
         {
             var dialogBox = new OpenFileDialog
             {
@@ -30,9 +30,10 @@ namespace ProgressTrackerLibrary.HelperMethods
 
                 var app = new AppModel
                 {
+                    id = 1,
                     appName = Name,
                     appLogoPath = appPath,
-
+                    activeTime = "00:00:00"
                 };
                 return app;
             }

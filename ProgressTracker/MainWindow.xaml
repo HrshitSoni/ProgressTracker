@@ -12,11 +12,6 @@
             <GradientStop Color="Black"/>
             <GradientStop Color="LightBlue" Offset="1"/>
         </LinearGradientBrush>
-
-        <!-- Define hover background and border brushes with opacity -->
-        <SolidColorBrush x:Key="HoverOverBackgroundBrush" Color="LightBlue" Opacity="0.5"/>
-        <SolidColorBrush x:Key="HoverOverBorderBrush" Color="LightBlue" Opacity="1"/>
-
     </Window.Resources>
 
     <!-- Dividing the whole Form in 3 Columns -->
