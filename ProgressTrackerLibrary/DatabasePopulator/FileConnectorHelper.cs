@@ -38,7 +38,7 @@ namespace ProgressTrackerLibrary.Database
 
             foreach(AppModel app in apps)
             {
-                newLine.Add($"{app.id}, {app.appName}, {app.appLogoPath}, {app.activeTime}");
+                newLine.Add($"{app.id},{app.appName},{app.appLogoPath},{app.activeTime}");
             }
 
             File.WriteAllLines(fileName.FullFilePath(), newLine);

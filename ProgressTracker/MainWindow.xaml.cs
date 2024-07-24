@@ -27,6 +27,7 @@ namespace ProgressTracker
             InitializeComponent();
             DataContext = appList;
 
+            ReadDatabase();
             RefreshAppList();
             AssignDayToUI();
         }
@@ -52,24 +53,30 @@ namespace ProgressTracker
             }
         }
 
+        private void ReadDatabase()
+        {
+            List<AppModel> file = FileConnector.ReadFile();
+
+            foreach(AppModel app in file)
+            {
+                LoadWindow(app);
+            }
+        }
+
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             // Opening the app dialog box
             var app = HelpingMethods.OpenAppsDialogBox_AddApp();
 
-            // so when i add a app or select a app i want to first add that into my data base 
-            //then extract each app from it and load it in the form 
-
-            //also i think loading app should be in different method than add btn because we want to load app every time//
-
-            FileConnector.SaveToAppFile(app);
-
-
-
-
-            // Adding the app to the Window/Ui
-            LoadWindow(app);
-
+            if (FileConnector.PresentInFile(app) == true)
+            {
+                MessageBox.Show("App is already present in the appList", "ERROR");
+            }
+            else
+            {
+                FileConnector.SaveToAppFile(app);
+                LoadWindow(app);
+            }
         }
         
         // Method to load the window
@@ -99,22 +106,8 @@ namespace ProgressTracker
 
             // Extracting Image from .exe file
             string filePath = app.appLogoPath;
-            var bitmap = filePath.GetImage();
-
-
-            // Converting bitmap to bitmapImageSource
-            using (MemoryStream memory = new MemoryStream()) 
-            {
-                bitmap.Save(memory, ImageFormat.Png); 
-                memory.Position = 0;
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit(); 
-                bitmapImage.StreamSource = memory; 
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad; 
-                bitmapImage.EndInit(); 
-                appLogo.Source = bitmapImage; 
-            }
-
+            appLogo.Source = filePath.GetImage().ConvertBitmapToImageSource();
+   
 
             // Panel that holds both image and Name textBlock
             StackPanel panel = new StackPanel

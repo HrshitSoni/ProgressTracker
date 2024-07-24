@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Media.Imaging;
+using System.Drawing.Imaging;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -50,6 +52,23 @@ namespace ProgressTrackerLibrary.HelperMethods
             Bitmap image = icon.ToBitmap();
 
             return image;
+        }
+
+        public static BitmapImage ConvertBitmapToImageSource(this Bitmap bitmap)
+        {
+            // Converting bitmap to bitmapImageSource
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, ImageFormat.Png);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+
         }
     }
 }
