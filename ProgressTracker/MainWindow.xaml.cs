@@ -68,7 +68,7 @@ namespace ProgressTracker
             // Opening the app dialog box
             var app = HelpingMethods.OpenAppsDialogBox_AddApp();
 
-            if (FileConnector.PresentInFile(app) == true)
+            if (app.PresentInFile() == true)
             {
                 MessageBox.Show("App is already present in the appList", "ERROR");
             }
@@ -140,7 +140,10 @@ namespace ProgressTracker
             if (AppList.SelectedItem != null)
             {
                 var button = (Button)AppList.SelectedItem;
-                appList.Remove(button);
+                AppModel app = button.ExtractAppFromButton();
+                app.RemoveFromAppFile();
+                appList.Clear();
+                ReadDatabase();
              
             }
             else

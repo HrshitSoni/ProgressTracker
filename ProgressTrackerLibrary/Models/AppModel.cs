@@ -12,7 +12,12 @@ namespace ProgressTrackerLibrary.Models
     {
         public int id { get; set; }
         public required string appName{ get; set; }
-        public  string appLogoPath { get; set; }
-        public string activeTime { get; set; }
+        public  string? appLogoPath { get; set; }
+        public string? activeTime { get; set; }
+
+        public AppModel()
+        {
+
+        }
     } 
 }

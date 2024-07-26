@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
+using System.Windows.Controls;
+using ProgressTrackerLibrary.DatabasePopulator;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -68,7 +70,25 @@ namespace ProgressTrackerLibrary.HelperMethods
                 bitmapImage.EndInit();
                 return bitmapImage;
             }
+        }
 
+        public static AppModel ExtractAppFromButton(this Button button)
+        {
+            StackPanel panel = (StackPanel)button.Content;
+            TextBlock textBlock = (TextBlock)panel.Children[1];
+
+            string appName = textBlock.Text;
+
+            var apps = FileConnector.ReadFile();
+            foreach(AppModel app in apps)
+            {
+                if(app.appName == appName)
+                {
+                    return app;
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -22,11 +22,11 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             appList.SaveAppListToFile(appFile);
         }
 
-        public static bool PresentInFile(AppModel app)
+        public static bool PresentInFile(this AppModel app)
         {
-            List<AppModel> file = ReadFile();
+            List<AppModel> appList = ReadFile();
 
-            foreach(AppModel presentApp in file)
+            foreach(AppModel presentApp in appList)
             {
                 if(app.appName == presentApp.appName)
                 {
@@ -35,6 +35,25 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             }
 
             return false;
+        }
+
+        public static void RemoveFromAppFile(this AppModel appModel)
+        {
+            List<AppModel> appList = ReadFile();
+            if(appModel!= null)
+            {
+
+                foreach (AppModel app in appList)
+                {
+                    if (app.appName == appModel.appName)
+                    {
+                        appList.Remove(app);
+                        break;
+                    }
+                }
+            }
+
+            appList.SaveAppListToFile(appFile);
         }
     }
 }
