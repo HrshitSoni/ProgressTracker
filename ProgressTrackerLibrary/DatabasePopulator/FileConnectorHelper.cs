@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Windows.Media;
 
 namespace ProgressTrackerLibrary.Database
@@ -38,7 +39,7 @@ namespace ProgressTrackerLibrary.Database
 
             foreach(AppModel app in apps)
             {
-                newLine.Add($"{app.id},{app.appName},{app.appLogoPath},{app.activeTime}");
+                newLine.Add($"{app.appName},{app.appLogoPath},{app.activeTime},{app.DayOfTheWeek}");
             }
 
             File.WriteAllLines(fileName.FullFilePath(), newLine);
@@ -53,10 +54,10 @@ namespace ProgressTrackerLibrary.Database
                 var columns = line.Split(',');
                 AppModel app = new AppModel
                 {
-                    id = int.Parse(columns[0]),
-                    appName = columns[1],
-                    appLogoPath = columns[2],
-                    activeTime = columns[3]
+                    appName = columns[0],
+                    appLogoPath = columns[1],
+                    activeTime = columns[2],
+                    DayOfTheWeek = columns[3]
                 };
 
                 apps.Add(app);

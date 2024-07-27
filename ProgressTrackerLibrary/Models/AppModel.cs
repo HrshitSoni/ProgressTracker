@@ -10,10 +10,10 @@ namespace ProgressTrackerLibrary.Models
 {
     public class AppModel
     {
-        public int id { get; set; }
         public required string appName{ get; set; }
         public  string? appLogoPath { get; set; }
         public string? activeTime { get; set; }
+        public string DayOfTheWeek { get; set; }
 
         public AppModel()
         {

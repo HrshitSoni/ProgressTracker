@@ -55,7 +55,7 @@ namespace ProgressTracker
 
         private void ReadDatabase()
         {
-            List<AppModel> file = FileConnector.ReadFile();
+            IEnumerable<AppModel> file = FileConnector.ReadFile();
 
             foreach(AppModel app in file)
             {
@@ -88,11 +88,13 @@ namespace ProgressTracker
                 Height = 42,
                 Width = 142,
                 TextWrapping = TextWrapping.Wrap,
-                FontSize = 25,
+                FontSize = 20,
                 Foreground = new SolidColorBrush(Colors.White),
                 TextAlignment = TextAlignment.Center,
+                Padding = new Thickness(8),
                 Text = app.appName,
-                Background = new SolidColorBrush(Colors.Transparent)
+                Background = new SolidColorBrush(Colors.Transparent),
+                ToolTip = app.appName,
             };
 
             // Image to the application
@@ -161,8 +163,7 @@ namespace ProgressTracker
         // Putting todays day in Ui
         private void AssignDayToUI()
         {
-            DayOfWeek day = DateAndTime.Today.DayOfWeek;
-            DayNameTextBox.Text = day.ToString();
+            DayNameTextBox.Text = HelpingMethods.DayOfTheWeek();
         }
     }
 }

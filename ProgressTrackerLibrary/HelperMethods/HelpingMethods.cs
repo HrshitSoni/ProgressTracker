@@ -32,12 +32,13 @@ namespace ProgressTrackerLibrary.HelperMethods
                 string appPath = dialogBox.FileName;
                 string Name = Path.GetFileNameWithoutExtension(appPath);
 
-                var app = new AppModel
+                AppModel app = new AppModel
                 {
-                    id = 1,
                     appName = Name,
                     appLogoPath = appPath,
-                    activeTime = "00:00:00"
+                    activeTime = "00:00:00",
+                    DayOfTheWeek = DayOfTheWeek(),
+
                 };
                 return app;
             }
@@ -80,15 +81,20 @@ namespace ProgressTrackerLibrary.HelperMethods
             string appName = textBlock.Text;
 
             var apps = FileConnector.ReadFile();
-            foreach(AppModel app in apps)
+            foreach (AppModel app in apps)
             {
-                if(app.appName == appName)
+                if (app.appName == appName)
                 {
                     return app;
                 }
             }
 
             return null;
+        }
+
+        public static string DayOfTheWeek()
+        {
+            return DateTime.Today.DayOfWeek.ToString();
         }
     }
 }
