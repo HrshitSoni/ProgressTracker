@@ -11,6 +11,8 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace ProgressTracker
 {
@@ -22,14 +24,50 @@ namespace ProgressTracker
         // List of Applications as Clickable Buttons
         private static ObservableCollection<Button> appList = new ObservableCollection<Button>();
 
+        private TimeTracking timeTracking;
+
+        private DispatcherTimer UiUpdateTimer;
+
+        private IEnumerable<AppModel> file = FileConnector.ReadFile();
+
+        private List<string> appNames;
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = appList;
 
+            timeTracking = new TimeTracking();
+
+
             ReadDatabase();
             RefreshAppList();
             AssignDayToUI();
+            StartUiUpdateTimer();
+        }
+
+        public void StartUiUpdateTimer()
+        {
+            UiUpdateTimer = new DispatcherTimer();
+            UiUpdateTimer.Interval += TimeSpan.FromSeconds(5);
+            UiUpdateTimer.Tick += UiUpdateTimer_Tick;
+            UiUpdateTimer.Start();
+        }
+        // update ui from focusTimes dictionary
+        private void UiUpdateTimer_Tick(object? sender, EventArgs e)
+        {
+            Dictionary<string,string> focusTimes = timeTracking.focustimes;
+            foreach(var NameTimePair in focusTimes)
+            {
+                foreach(AppModel app in file)
+                {
+                    if(app.appName == NameTimePair.Key)
+                    {
+                        app.activeTime = NameTimePair.Value.ToString();
+                    }
+                }
+            }
+
         }
 
         // Update the UI Based on backend
@@ -55,8 +93,7 @@ namespace ProgressTracker
 
         private void ReadDatabase()
         {
-            IEnumerable<AppModel> file = FileConnector.ReadFile();
-
+            appList.Clear();
             foreach(AppModel app in file)
             {
                 LoadWindow(app);
@@ -91,7 +128,7 @@ namespace ProgressTracker
                 FontSize = 20,
                 Foreground = new SolidColorBrush(Colors.White),
                 TextAlignment = TextAlignment.Center,
-                Padding = new Thickness(8),
+                Padding = new Thickness(8 ),
                 Text = app.appName,
                 Background = new SolidColorBrush(Colors.Transparent),
                 ToolTip = app.appName,
@@ -144,7 +181,6 @@ namespace ProgressTracker
                 var button = (Button)AppList.SelectedItem;
                 AppModel app = button.ExtractAppFromButton();
                 app.RemoveFromAppFile();
-                appList.Clear();
                 ReadDatabase();
              
             }
