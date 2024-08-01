@@ -18,11 +18,11 @@ namespace ProgressTrackerLibrary.HelperMethods
         public System.Timers.Timer timer;
         public IntPtr currentWindow;
         public DateTime focusStartTime;
-        public Dictionary<string, string> focustimes;
+        public Dictionary<string, TimeSpan> focustimes;
 
         public TimeTracking()
         {
-            focustimes = new Dictionary<string, string>();
+            focustimes = new Dictionary<string, TimeSpan>();
             timer = new System.Timers.Timer(1000);
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
@@ -47,12 +47,13 @@ namespace ProgressTrackerLibrary.HelperMethods
                         if (focustimes.ContainsKey(generalName))
                         {
                             
-                            focustimes[generalName] += focusTime.ToString();
+                            focustimes[generalName] += focusTime;
                         }
                         else
                         {
-                            focustimes[generalName] = focusTime.ToString();
+                            focustimes[generalName] = focusTime;
                         }
+
                     }
                 }
 

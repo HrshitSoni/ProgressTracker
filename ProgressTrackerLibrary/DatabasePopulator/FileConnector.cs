@@ -1,5 +1,6 @@
 ﻿using ProgressTrackerLibrary.Database;
 using ProgressTrackerLibrary.Models;
+using System.Windows;
 
 
 namespace ProgressTrackerLibrary.DatabasePopulator
@@ -54,6 +55,18 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             }
 
             appList.SaveAppListToFile(appFile);
+        }
+
+        public static void UpdateAppTime(AppModel appModel)
+        {
+            List<AppModel> appList = ReadFile();
+            var currApp = appList.FirstOrDefault(app => app.appName == appModel.appName);
+
+            if (currApp != null)
+            {
+                currApp.activeTime = appModel.activeTime;
+                appList.SaveAppListToFile(appFile);
+            }
         }
     }
 }

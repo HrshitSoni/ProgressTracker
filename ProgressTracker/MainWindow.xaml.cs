@@ -56,7 +56,7 @@ namespace ProgressTracker
         // update ui from focusTimes dictionary
         private void UiUpdateTimer_Tick(object? sender, EventArgs e)
         {
-            Dictionary<string,string> focusTimes = timeTracking.focustimes;
+            Dictionary<string,TimeSpan> focusTimes = timeTracking.focustimes;
             foreach(var NameTimePair in focusTimes)
             {
                 foreach(AppModel app in file)
@@ -65,9 +65,10 @@ namespace ProgressTracker
                     {
                         app.activeTime = NameTimePair.Value.ToString();
                     }
+                    FileConnector.UpdateAppTime(app);
+                    Trace.WriteLine(app.activeTime);
                 }
             }
-
         }
 
         // Update the UI Based on backend

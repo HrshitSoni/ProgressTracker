@@ -38,7 +38,6 @@ namespace ProgressTrackerLibrary.HelperMethods
                     appLogoPath = appPath,
                     activeTime = "00:00:00",
                     DayOfTheWeek = DayOfTheWeek(),
-
                 };
                 return app;
             }
