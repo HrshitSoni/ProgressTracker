@@ -4,6 +4,7 @@ using System.Timers;
 using System;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
+using System.Net.Http;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -26,6 +27,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             timer = new System.Timers.Timer(1000);
             timer.Elapsed += Timer_Elapsed;
             timer.Start();
+            focusStartTime = DateTime.Now;
         }
 
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
@@ -33,12 +35,12 @@ namespace ProgressTrackerLibrary.HelperMethods
             IntPtr foregroundWindow = GetForegroundWindow();
             string foregroundWindowTitle = GetWindowTitle(foregroundWindow);
 
-            if(foregroundWindow != currentWindow)
+            if (foregroundWindow != currentWindow)
             {
                 if(currentWindow != IntPtr.Zero)
                 {
-                    TimeSpan focusTime = DateTime.Now - focusStartTime;
                     string previousWindowTitle = GetWindowTitle(currentWindow);
+                    TimeSpan focusTime = DateTime.Now - focusStartTime;
 
                     if (!string.IsNullOrEmpty(previousWindowTitle))
                     {
@@ -53,19 +55,33 @@ namespace ProgressTrackerLibrary.HelperMethods
                         {
                             focustimes[generalName] = focusTime;
                         }
-
                     }
                 }
 
                 currentWindow = foregroundWindow;
                 focusStartTime = DateTime.Now;
             }
+            else
+            {
+                if (currentWindow != IntPtr.Zero)
+                {
+                    string generalName = GetGeneralName(GetWindowTitle(currentWindow));
+                    if (focustimes.ContainsKey(generalName))
+                    {
+                        focustimes[generalName] += TimeSpan.FromSeconds(1);
+                    }
+                    else
+                    {
+                        focustimes[generalName] = TimeSpan.FromSeconds(1);
+                    }
+                }
+            }
         }
 
         public string GetWindowTitle(IntPtr window)
         {
-            StringBuilder title = new StringBuilder(256);
-            if (GetWindowText(window,title,256)>0)
+            StringBuilder title = new StringBuilder(10000);
+            if (GetWindowText(window,title,10000)>0)
             {
                 return title.ToString();
             }
@@ -79,7 +95,27 @@ namespace ProgressTrackerLibrary.HelperMethods
 
         public string GetGeneralName(string windowTitle)
         {
-            return "devenv";
+            if(windowTitle.Contains("Microsoft Visual Studio") == true)
+            {
+                return "devenv";
+            }
+            if(windowTitle.Contains("Brave"))
+            {
+                return "brave";
+            }
+            if(windowTitle.Contains("Google Chrome"))
+            {
+                return "chrome";
+            }
+            if(windowTitle.Contains("Visual Studio Code")) 
+            {
+                return "Code";
+            }
+            if (windowTitle.Contains("Spotify Free"))
+            {
+                return "";
+            }
+            return "";
         }
     }
 }

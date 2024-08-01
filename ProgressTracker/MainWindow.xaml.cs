@@ -49,7 +49,7 @@ namespace ProgressTracker
         public void StartUiUpdateTimer()
         {
             UiUpdateTimer = new DispatcherTimer();
-            UiUpdateTimer.Interval += TimeSpan.FromSeconds(5);
+            UiUpdateTimer.Interval += TimeSpan.FromSeconds(2);
             UiUpdateTimer.Tick += UiUpdateTimer_Tick;
             UiUpdateTimer.Start();
         }
@@ -57,16 +57,22 @@ namespace ProgressTracker
         private void UiUpdateTimer_Tick(object? sender, EventArgs e)
         {
             Dictionary<string,TimeSpan> focusTimes = timeTracking.focustimes;
-            foreach(var NameTimePair in focusTimes)
+            foreach(var nameTimePair in focusTimes)
             {
                 foreach(AppModel app in file)
                 {
-                    if(app.appName == NameTimePair.Key)
+                    if(app.appName == nameTimePair.Key)
                     {
-                        app.activeTime = NameTimePair.Value.ToString();
+                        // Update the active time of the app
+                        TimeSpan currentTime = nameTimePair.Value;
+                        app.activeTime = currentTime.ToString(@"hh\:mm\:ss");
+
+                        // Update the time in the file
+                        FileConnector.UpdateAppTime(app);
+
+                        // Reset the time in focusTimes
+                        timeTracking.focustimes[nameTimePair.Key] = TimeSpan.Zero;
                     }
-                    FileConnector.UpdateAppTime(app);
-                    Trace.WriteLine(app.activeTime);
                 }
             }
         }
@@ -113,7 +119,10 @@ namespace ProgressTracker
             else
             {
                 FileConnector.SaveToAppFile(app);
-                LoadWindow(app);
+                if(app != null)
+                {
+                    LoadWindow(app);
+                }
             }
         }
         

@@ -27,11 +27,14 @@ namespace ProgressTrackerLibrary.DatabasePopulator
         {
             List<AppModel> appList = ReadFile();
 
-            foreach(AppModel presentApp in appList)
+            if(app != null)
             {
-                if(app.appName == presentApp.appName)
+                foreach (AppModel presentApp in appList)
                 {
-                    return true;
+                    if (app.appName == presentApp.appName)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -64,7 +67,15 @@ namespace ProgressTrackerLibrary.DatabasePopulator
 
             if (currApp != null)
             {
-                currApp.activeTime = appModel.activeTime;
+                TimeSpan currAppTime,appModelTime;
+                TimeSpan.TryParse(currApp.activeTime,out currAppTime);
+                TimeSpan.TryParse(appModel.activeTime, out appModelTime);
+                currAppTime += appModelTime;
+                currApp.activeTime = currAppTime.ToString(@"hh\:mm\:ss");
+                if(currApp.DayOfTheWeek != DateTime.Now.DayOfWeek.ToString())
+                {
+                    currApp.DayOfTheWeek = DateTime.Now.DayOfWeek.ToString();
+                }
                 appList.SaveAppListToFile(appFile);
             }
         }
