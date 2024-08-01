@@ -107,13 +107,9 @@ namespace ProgressTrackerLibrary.HelperMethods
             {
                 return "chrome";
             }
-            if(windowTitle.Contains("Visual Studio Code")) 
+            if (windowTitle.Contains("Visual Studio Code"))
             {
                 return "Code";
-            }
-            if (windowTitle.Contains("Spotify Free"))
-            {
-                return "";
             }
             return "";
         }

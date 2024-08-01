@@ -21,7 +21,7 @@ namespace ProgressTrackerLibrary.HelperMethods
         {
             var dialogBox = new OpenFileDialog
             {
-               Filter = "Executable files (*.exe)|*.exe|Application files (*.appref-ms)|*.appref-ms|All files (*.*)|*.*",
+               Filter = "Executable files (*.exe)|*.exe",
                Title = "Please select an .exe file",
                Multiselect = false,
                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
