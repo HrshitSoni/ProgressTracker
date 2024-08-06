@@ -36,7 +36,7 @@
         </StackPanel>
 
         <!-- ListView -->
-        <ListView x:Name="AppList" Grid.Column="0" Width="200" Background="{StaticResource BackgroundBrush}" Margin="0,50,0,0" BorderBrush="Transparent" ItemsSource="{Binding appList}" SelectionMode ="Single" >
+        <ListView x:Name="AppList" Grid.Column="0" Width="200" Background="{StaticResource BackgroundBrush}" Margin="0,50,0,0" BorderBrush="Transparent" ItemsSource="{Binding appList}" SelectionMode ="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Background="Transparent">

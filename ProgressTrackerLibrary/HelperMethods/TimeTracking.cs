@@ -1,10 +1,10 @@
 ﻿using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
-using System;
-using Microsoft.VisualBasic;
 using System.Diagnostics;
-using System.Net.Http;
+using System.Management;
+using System.IO;
+
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -16,9 +16,14 @@ namespace ProgressTrackerLibrary.HelperMethods
         [DllImport("user32.dll", SetLastError = true)]
         private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        public System.Timers.Timer timer;
-        public IntPtr currentWindow;
-        public DateTime focusStartTime;
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
+
+
+
+        private System.Timers.Timer timer;
+        private IntPtr currentWindow;
+        private DateTime focusStartTime;
         public Dictionary<string, TimeSpan> focustimes;
 
         public TimeTracking()
@@ -33,18 +38,18 @@ namespace ProgressTrackerLibrary.HelperMethods
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             IntPtr foregroundWindow = GetForegroundWindow();
-            string foregroundWindowTitle = GetWindowTitle(foregroundWindow);
 
             if (foregroundWindow != currentWindow)
             {
                 if(currentWindow != IntPtr.Zero)
                 {
-                    string previousWindowTitle = GetWindowTitle(currentWindow);
+                    IntPtr previousWindow = currentWindow;
+
                     TimeSpan focusTime = DateTime.Now - focusStartTime;
 
-                    if (!string.IsNullOrEmpty(previousWindowTitle))
+                    if (previousWindow != IntPtr.Zero)
                     {
-                        string generalName = GetGeneralName(previousWindowTitle);
+                        string generalName = GetGeneralName(previousWindow);
 
                         if (focustimes.ContainsKey(generalName))
                         {
@@ -65,7 +70,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             {
                 if (currentWindow != IntPtr.Zero)
                 {
-                    string generalName = GetGeneralName(GetWindowTitle(currentWindow));
+                    string generalName = GetGeneralName(currentWindow);
                     if (focustimes.ContainsKey(generalName))
                     {
                         focustimes[generalName] += TimeSpan.FromSeconds(1);
@@ -78,7 +83,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             }
         }
 
-        public string GetWindowTitle(IntPtr window)
+        private string GetWindowTitle(IntPtr window)
         {
             StringBuilder title = new StringBuilder(10000);
             if (GetWindowText(window,title,10000)>0)
@@ -93,23 +98,35 @@ namespace ProgressTrackerLibrary.HelperMethods
             timer.Stop();
         }
 
-        public string GetGeneralName(string windowTitle)
+        private string GetGeneralName(IntPtr Window)
         {
-            if(windowTitle.Contains("Microsoft Visual Studio") == true)
+            GetWindowThreadProcessId(Window, out uint processId);
+            Process process = Process.GetProcessById((int)processId);
+            string path = ProcessExecutablePath(process);
+            return Path.GetFileNameWithoutExtension(path);
+        }
+
+        private static string ProcessExecutablePath(Process process)
+        {
+            try
             {
-                return "devenv";
+               return process.MainModule.FileName;
             }
-            if(windowTitle.Contains("Brave"))
+            catch
             {
-                return "brave";
-            }
-            if(windowTitle.Contains("Google Chrome"))
-            {
-                return "chrome";
-            }
-            if (windowTitle.Contains("Visual Studio Code"))
-            {
-                return "Code";
+                string query = "SELECT ExecutablePath, ProcessID FROM Win32_Process";
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+
+                foreach(ManagementObject item in searcher.Get())
+                {
+                    object id = item["ProcessId"];
+                    object path = item["ExecutablePath"];
+
+                    if(path != null && id.ToString() == process.Id.ToString())
+                    {
+                        return path.ToString();
+                    }
+                }
             }
             return "";
         }

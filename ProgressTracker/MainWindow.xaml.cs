@@ -13,6 +13,8 @@ using System.Drawing;
 using System.Windows.Media.Imaging;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Security;
+using System.Windows.Input;
 
 namespace ProgressTracker
 {
@@ -28,7 +30,7 @@ namespace ProgressTracker
 
         private DispatcherTimer UiUpdateTimer;
 
-        private IEnumerable<AppModel> file = FileConnector.ReadFile();
+        private List<AppModel> file = FileConnector.ReadFile();
 
         private List<string> appNames;
 
@@ -37,13 +39,20 @@ namespace ProgressTracker
             InitializeComponent();
             DataContext = appList;
 
-            timeTracking = new TimeTracking();
-
-
             ReadDatabase();
             RefreshAppList();
             AssignDayToUI();
+
+            timeTracking = new TimeTracking();
+
             StartUiUpdateTimer();
+
+            this.Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            timeTracking.StopTracking();
         }
 
         public void StartUiUpdateTimer()
@@ -101,6 +110,7 @@ namespace ProgressTracker
         private void ReadDatabase()
         {
             appList.Clear();
+
             foreach(AppModel app in file)
             {
                 LoadWindow(app);
@@ -191,7 +201,7 @@ namespace ProgressTracker
                 var button = (Button)AppList.SelectedItem;
                 AppModel app = button.ExtractAppFromButton();
                 app.RemoveFromAppFile();
-                ReadDatabase();
+                appList.Remove(button);
              
             }
             else
@@ -203,7 +213,25 @@ namespace ProgressTracker
         // Method to show Active Time of the application
         private void AppButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("This method is not implemented yet");
+            Button button = (Button)sender;
+            var app = button.ExtractAppFromButton();
+
+            Dispatcher.BeginInvoke(new Action(()=>{
+                AppList.SelectedItem = null;
+            }));
+
+            foreach(AppModel appModel in file)
+            {
+                if(app.appName == app.appName)
+                {
+                    TimeSpan time = TimeSpan.Zero;
+                    TimeSpan.TryParse(app.activeTime,out time);
+
+                    HourText.Text = time.Hours.ToString("D2");
+                    MinutesText.Text = time.Minutes.ToString("D2");
+                    SecondsText.Text = time.Seconds.ToString("D2");
+                }
+            }
         }
 
         // Putting todays day in Ui
