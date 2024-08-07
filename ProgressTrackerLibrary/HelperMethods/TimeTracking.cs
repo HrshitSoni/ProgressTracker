@@ -14,16 +14,15 @@ namespace ProgressTrackerLibrary.HelperMethods
         private static extern IntPtr GetForegroundWindow();
 
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
-        [DllImport("user32.dll", SetLastError = true)]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
-
-
+        // Windows api methods that are not available in .Net
 
         private System.Timers.Timer timer;
+
         private IntPtr currentWindow;
+
         private DateTime focusStartTime;
+
         public Dictionary<string, TimeSpan> focustimes;
 
         public TimeTracking()
@@ -35,6 +34,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             focusStartTime = DateTime.Now;
         }
 
+        // Method the calculate time of each foreground window open and put it in the map with respective .exe name
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             IntPtr foregroundWindow = GetForegroundWindow();
@@ -83,21 +83,13 @@ namespace ProgressTrackerLibrary.HelperMethods
             }
         }
 
-        private string GetWindowTitle(IntPtr window)
-        {
-            StringBuilder title = new StringBuilder(10000);
-            if (GetWindowText(window,title,10000)>0)
-            {
-                return title.ToString();
-            }
-            return "";
-        }
-
+        // Method to stop Tracking
         public void StopTracking()
         {
             timer.Stop();
         }
 
+        // Method to get the .exe name for the window 
         private string GetGeneralName(IntPtr Window)
         {
             GetWindowThreadProcessId(Window, out uint processId);
@@ -106,6 +98,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             return Path.GetFileNameWithoutExtension(path);
         }
 
+        // Method to get the file path of the process of the current window
         private static string ProcessExecutablePath(Process process)
         {
             try

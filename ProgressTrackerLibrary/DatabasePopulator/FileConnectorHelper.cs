@@ -11,7 +11,7 @@ namespace ProgressTrackerLibrary.Database
     {
         // These are extension methods 
 
-        // Location of the file in the pc
+        // Location of the file in the pc along with the file name
         public static string FullFilePath(this string fileName)
         {
             string basePath = $"{ConfigurationManager.AppSettings["filePath"]}";
@@ -32,7 +32,7 @@ namespace ProgressTrackerLibrary.Database
             }
         }
 
-
+        // Writing a List<appModel> in the file
         public static void SaveAppListToFile(this List<AppModel> apps, string fileName)
         {
             List<string> newLine = new List<string>();
@@ -48,6 +48,7 @@ namespace ProgressTrackerLibrary.Database
             File.WriteAllLines(fileName.FullFilePath(), newLine);
         }
 
+        // Converting file(List<string> into a List<appModel>
         public static List<AppModel> ConvertToAppModel(this List<string> file)
         {
             List<AppModel> apps = new List<AppModel>();

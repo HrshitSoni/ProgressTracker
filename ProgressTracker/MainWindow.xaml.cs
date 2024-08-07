@@ -28,9 +28,9 @@ namespace ProgressTracker
 
         private TimeTracking timeTracking;
 
-        private DispatcherTimer UiUpdateTimer;
+        private DispatcherTimer DatabaseUpdateTimer;
 
-        private List<AppModel> file = FileConnector.ReadFile();
+        private List<AppModel> file = FileConnector.appFile.ReadFile();
 
         private List<string> appNames;
 
@@ -45,7 +45,7 @@ namespace ProgressTracker
 
             timeTracking = new TimeTracking();
 
-            StartUiUpdateTimer();
+            StartDatabaseUpdateTimer();
 
             this.Closing += MainWindow_Closing;
         }
@@ -55,15 +55,17 @@ namespace ProgressTracker
             timeTracking.StopTracking();
         }
 
-        public void StartUiUpdateTimer()
+        // Timer for updating the database 
+        public void StartDatabaseUpdateTimer()
         {
-            UiUpdateTimer = new DispatcherTimer();
-            UiUpdateTimer.Interval += TimeSpan.FromSeconds(2);
-            UiUpdateTimer.Tick += UiUpdateTimer_Tick;
-            UiUpdateTimer.Start();
+            DatabaseUpdateTimer = new DispatcherTimer();
+            DatabaseUpdateTimer.Interval += TimeSpan.FromSeconds(2);
+            DatabaseUpdateTimer.Tick += DatabaseUpdateTimer_Tick;
+            DatabaseUpdateTimer.Start();
         }
-        // update ui from focusTimes dictionary
-        private void UiUpdateTimer_Tick(object? sender, EventArgs e)
+
+        // update Database from focusTimes dictionary
+        private void DatabaseUpdateTimer_Tick(object? sender, EventArgs e)
         {
             Dictionary<string,TimeSpan> focusTimes = timeTracking.focustimes;
             foreach(var nameTimePair in focusTimes)
@@ -107,16 +109,16 @@ namespace ProgressTracker
             }
         }
 
+        // Loading apps from file to the UI list
         private void ReadDatabase()
         {
-            appList.Clear();
-
             foreach(AppModel app in file)
             {
                 LoadWindow(app);
             }
         }
 
+        // Method for adding apps in the app list & Database
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             // Opening the app dialog box
@@ -139,7 +141,6 @@ namespace ProgressTracker
         // Method to load the window
         private void LoadWindow(AppModel app)
         {
-            // Name of the application that is added 
             TextBlock AppNameTextBlock = new TextBlock
             {
                 Height = 42,
@@ -148,13 +149,12 @@ namespace ProgressTracker
                 FontSize = 20,
                 Foreground = new SolidColorBrush(Colors.White),
                 TextAlignment = TextAlignment.Center,
-                Padding = new Thickness(8 ),
+                Padding = new Thickness(8),
                 Text = app.appName,
                 Background = new SolidColorBrush(Colors.Transparent),
                 ToolTip = app.appName,
             };
 
-            // Image to the application
             System.Windows.Controls.Image appLogo = new()
             {
                 Height = 42,
@@ -163,12 +163,10 @@ namespace ProgressTracker
                
             };
 
-            // Extracting Image from .exe file
             string filePath = app.appLogoPath;
             appLogo.Source = filePath.GetImage().ConvertBitmapToImageSource();
    
 
-            // Panel that holds both image and Name textBlock
             StackPanel panel = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
@@ -180,7 +178,6 @@ namespace ProgressTracker
             panel.Children.Add(AppNameTextBlock);
 
 
-            // Lastly its a button so user clicks where ever it will trigger 
             Button AppButton = new Button
             {
                 Height = 50,
@@ -193,7 +190,7 @@ namespace ProgressTracker
             appList.Add(AppButton);
         }
 
-        // Method to remove an Application from the app list
+        // Method to remove an Application from the app list & Database
         private void RemoveBtn_Click(object sender, RoutedEventArgs e)
         {
             if (AppList.SelectedItem != null)

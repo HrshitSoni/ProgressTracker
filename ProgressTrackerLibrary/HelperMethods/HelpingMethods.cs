@@ -16,7 +16,7 @@ namespace ProgressTrackerLibrary.HelperMethods
 {
     public static class HelpingMethods
     {
-        // Opening .exe files dialog box
+        // Opening .exe files dialog box with folder path being the program files
         public static AppModel  OpenAppsDialogBox_AddApp()
         {
             var dialogBox = new OpenFileDialog
@@ -45,8 +45,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             return null;
         }
 
-
-        // Extracting Image from .exe file
+        // Extracting Icon of app from .exe file
         public static Bitmap GetImage(this string path)
         {
             Icon icon = Icon.ExtractAssociatedIcon(path);
@@ -56,6 +55,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             return image;
         }
 
+        // Method to convert the bitmap to image source
         public static BitmapImage ConvertBitmapToImageSource(this Bitmap bitmap)
         {
             // Converting bitmap to bitmapImageSource
@@ -72,6 +72,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             }
         }
 
+        // Method to extract app from the button in the app List
         public static AppModel ExtractAppFromButton(this Button button)
         {
             StackPanel panel = (StackPanel)button.Content;
@@ -79,7 +80,7 @@ namespace ProgressTrackerLibrary.HelperMethods
 
             string appName = textBlock.Text;
 
-            var apps = FileConnector.ReadFile();
+            var apps = FileConnector.appFile.ReadFile();
             foreach (AppModel app in apps)
             {
                 if (app.appName == appName)
@@ -91,6 +92,7 @@ namespace ProgressTrackerLibrary.HelperMethods
             return null;
         }
 
+        // Method for assigning the day of the week 
         public static string DayOfTheWeek()
         {
             return DateTime.Today.DayOfWeek.ToString();

@@ -8,6 +8,7 @@ using System.Drawing;
 
 namespace ProgressTrackerLibrary.Models
 {
+    // App model to represent application 
     public class AppModel
     {
         public required string appName{ get; set; }
