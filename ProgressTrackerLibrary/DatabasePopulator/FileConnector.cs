@@ -2,6 +2,7 @@
 using ProgressTrackerLibrary.HelperMethods;
 using ProgressTrackerLibrary.Models;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 
 
@@ -110,6 +111,8 @@ namespace ProgressTrackerLibrary.DatabasePopulator
                 if (differenceInDates >= 7)
                 {
                     dateDayModels.Clear();
+
+                    DeleteAllDayFileAfter7Days();
                 }
             }
 
@@ -147,6 +150,29 @@ namespace ProgressTrackerLibrary.DatabasePopulator
                 }
             }
             eachDayFile.SaveAppListToFile(EachDayFile);
+        }
+
+        public static void DeleteAllDayFileAfter7Days()
+        {
+            List<string> fileNamesList = new()
+            {
+                "Sunday_AppFile.csv",
+                "Monday_AppFile.csv",
+                "Tuesday_AppFile.csv",
+                "Wednesday_AppFile.csv",
+                "Thursday_AppFile.csv",
+                "Friday_AppFile.csv",
+                "Saturday_AppFile.csv"
+            };
+
+            foreach(string filename in fileNamesList)
+            {
+                string fullpath = filename.FullFilePath();
+                if (File.Exists(fullpath))
+                {
+                    File.Delete(fullpath);
+                }
+            }
         }
     }
 }
