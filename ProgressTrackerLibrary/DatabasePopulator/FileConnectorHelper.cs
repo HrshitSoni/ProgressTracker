@@ -69,5 +69,38 @@ namespace ProgressTrackerLibrary.Database
 
             return apps;
         }
+
+        public static void SaveDayListToFile(this List<DateDayModel>days,string fileName)
+        {
+            List<string> newLine = new List<string>();
+
+            foreach(DateDayModel d in days)
+            {
+                if (d != null)
+                {
+                    newLine.Add($"{d.day},{d.date}");
+                }
+            }
+            File.WriteAllLines(fileName.FullFilePath(), newLine);
+        }
+
+        public static List<DateDayModel> ConvertToDateDayModel(this List<string> file)
+        {
+            List<DateDayModel> dateDays = new List<DateDayModel>();
+
+            foreach(string line in file)
+            {
+                string[] columns = line.Split(',');
+                DateDayModel dateDayModel = new()
+                {
+                    day = columns[0],
+                    date = columns[1]
+                };
+
+                dateDays.Add(dateDayModel);
+            }
+
+            return dateDays;
+        }
     }
 }

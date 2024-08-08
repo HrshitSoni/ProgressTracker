@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.Windows.Controls;
 using ProgressTrackerLibrary.DatabasePopulator;
+using System.Globalization;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -96,6 +97,20 @@ namespace ProgressTrackerLibrary.HelperMethods
         public static string DayOfTheWeek()
         {
             return DateTime.Today.DayOfWeek.ToString();
+        }
+
+        public static List<string> SortedListOfDates(this List<DateDayModel> dateDayModels)
+        {
+            List<DateTime> dateTimes = new List<DateTime>();
+
+            foreach (var dateDay in dateDayModels)
+            {
+                string date = dateDay.date;
+                DateTime actualDate = DateTime.ParseExact(date, "dd MMMM yyyy", CultureInfo.InvariantCulture);
+                dateTimes.Add(actualDate);
+            }
+
+            return dateTimes.OrderBy(date => date).Select(date => date.ToString("dd MMMM yyyy")).ToList();
         }
     }
 }

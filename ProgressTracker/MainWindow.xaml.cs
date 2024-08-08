@@ -2,19 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Microsoft.VisualBasic;
-using Microsoft.Win32;
 using ProgressTrackerLibrary.Models;
 using ProgressTrackerLibrary.HelperMethods;
 using ProgressTrackerLibrary.DatabasePopulator;
-using System.IO;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Windows.Media.Imaging;
-using System.Diagnostics;
 using System.Windows.Threading;
-using System.Security;
-using System.Windows.Input;
+
 
 namespace ProgressTracker
 {
@@ -30,7 +22,8 @@ namespace ProgressTracker
 
         private DispatcherTimer DatabaseUpdateTimer;
 
-        private List<AppModel> file = FileConnector.appFile.ReadFile();
+        private string appfileName = FileConnector.appFile;
+        private string eachDayFileName = FileConnector.EachDayFile;
 
         private List<string> appNames;
 
@@ -46,6 +39,7 @@ namespace ProgressTracker
             timeTracking = new TimeTracking();
 
             StartDatabaseUpdateTimer();
+            FileConnector.RecordEachDay();
 
             this.Closing += MainWindow_Closing;
         }
@@ -70,7 +64,7 @@ namespace ProgressTracker
             Dictionary<string,TimeSpan> focusTimes = timeTracking.focustimes;
             foreach(var nameTimePair in focusTimes)
             {
-                foreach(AppModel app in file)
+                foreach(AppModel app in eachDayFileName.ReadFile())
                 {
                     if(app.appName == nameTimePair.Key)
                     {
@@ -79,7 +73,7 @@ namespace ProgressTracker
                         app.activeTime = currentTime.ToString(@"hh\:mm\:ss");
 
                         // Update the time in the file
-                        FileConnector.UpdateAppTime(app);
+                        app.UpdateAppTime(eachDayFileName);
 
                         // Reset the time in focusTimes
                         timeTracking.focustimes[nameTimePair.Key] = TimeSpan.Zero;
@@ -109,13 +103,15 @@ namespace ProgressTracker
             }
         }
 
-        // Loading apps from file to the UI list
+        // Loading apps from file to the UI list && also load app in each day file
         private void ReadDatabase()
         {
-            foreach(AppModel app in file)
+            foreach(AppModel app in appfileName.ReadFile())
             {
-                LoadWindow(app);
+                LoadAppInAppList(app);
             }
+
+            FileConnector.UpdateEachDayFileBasedOnAppFile();
         }
 
         // Method for adding apps in the app list & Database
@@ -123,23 +119,32 @@ namespace ProgressTracker
         {
             // Opening the app dialog box
             var app = HelpingMethods.OpenAppsDialogBox_AddApp();
+            if (app == null) return;
 
-            if (app.PresentInFile() == true)
+            bool isInAppFile = app.PresentInFile(appfileName);
+            bool isInDayFile = app.PresentInFile(eachDayFileName);
+
+            if (isInAppFile && isInDayFile)
             {
-                MessageBox.Show("App is already present in the appList", "ERROR");
+                MessageBox.Show("App is already present in both files", "Info");
+                return;
             }
-            else
+
+            if (!isInAppFile)
             {
-                FileConnector.SaveToAppFile(app);
-                if(app != null)
-                {
-                    LoadWindow(app);
-                }
+                app.SaveToAppFile(appfileName);
             }
+
+            if (!isInDayFile)
+            {
+                app.SaveToAppFile(eachDayFileName);
+            }
+
+            LoadAppInAppList(app);
         }
-        
+
         // Method to load the window
-        private void LoadWindow(AppModel app)
+        private void LoadAppInAppList(AppModel app)
         {
             TextBlock AppNameTextBlock = new TextBlock
             {
@@ -196,14 +201,18 @@ namespace ProgressTracker
             if (AppList.SelectedItem != null)
             {
                 var button = (Button)AppList.SelectedItem;
-                AppModel app = button.ExtractAppFromButton();
-                app.RemoveFromAppFile();
+                var app = button.ExtractAppFromButton();
+
+                // Remove the app from both files
+                app.RemoveFromAppFile(appfileName);
+                app.RemoveFromAppFile(eachDayFileName);
+
+                // Remove the button from the UI list
                 appList.Remove(button);
-             
             }
             else
             {
-                MessageBox.Show("Please select an app to remove. You can select app by right clicking on it","Error");
+                MessageBox.Show("Please select an app to remove. You can select an app by right-clicking on it.", "Error");
             }
         }
 
@@ -217,12 +226,12 @@ namespace ProgressTracker
                 AppList.SelectedItem = null;
             }));
 
-            foreach(AppModel appModel in file)
+            foreach(AppModel appModel in eachDayFileName.ReadFile())
             {
-                if(app.appName == app.appName)
+                if(app.appName == appModel.appName)
                 {
                     TimeSpan time = TimeSpan.Zero;
-                    TimeSpan.TryParse(app.activeTime,out time);
+                    TimeSpan.TryParse(appModel.activeTime,out time);
 
                     HourText.Text = time.Hours.ToString("D2");
                     MinutesText.Text = time.Minutes.ToString("D2");
