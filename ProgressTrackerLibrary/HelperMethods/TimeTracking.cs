@@ -4,6 +4,7 @@ using System.Timers;
 using System.Diagnostics;
 using System.Management;
 using System.IO;
+using System.Windows.Threading;
 
 
 namespace ProgressTrackerLibrary.HelperMethods
@@ -17,7 +18,7 @@ namespace ProgressTrackerLibrary.HelperMethods
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
         // Windows api methods that are not available in .Net
 
-        private System.Timers.Timer timer;
+        private DispatcherTimer timer = new DispatcherTimer();
 
         private IntPtr currentWindow;
 
@@ -28,58 +29,38 @@ namespace ProgressTrackerLibrary.HelperMethods
         public TimeTracking()
         {
             focustimes = new Dictionary<string, TimeSpan>();
-            timer = new System.Timers.Timer(1000);
-            timer.Elapsed += Timer_Elapsed;
+            timer.Interval = TimeSpan.FromMilliseconds(1000);
+            timer.Tick += Timer_Elapsed;
             timer.Start();
             focusStartTime = DateTime.Now;
         }
 
         // Method the calculate time of each foreground window open and put it in the map with respective .exe name
-        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object? sender, EventArgs e)
         {
             IntPtr foregroundWindow = GetForegroundWindow();
 
             if (foregroundWindow != currentWindow)
             {
-                if(currentWindow != IntPtr.Zero)
-                {
-                    IntPtr previousWindow = currentWindow;
-
-                    TimeSpan focusTime = DateTime.Now - focusStartTime;
-
-                    if (previousWindow != IntPtr.Zero)
-                    {
-                        string generalName = GetGeneralName(previousWindow);
-
-                        if (focustimes.ContainsKey(generalName))
-                        {
-                            
-                            focustimes[generalName] += focusTime;
-                        }
-                        else
-                        {
-                            focustimes[generalName] = focusTime;
-                        }
-                    }
-                }
-
-                currentWindow = foregroundWindow;
-                focusStartTime = DateTime.Now;
-            }
-            else
-            {
+                // Calculate time for the previous window
                 if (currentWindow != IntPtr.Zero)
                 {
-                    string generalName = GetGeneralName(currentWindow);
-                    if (focustimes.ContainsKey(generalName))
+                    string previousWindowName = GetGeneralName(currentWindow);
+                    TimeSpan focusTime = DateTime.Now - focusStartTime;
+
+                    if (focustimes.ContainsKey(previousWindowName))
                     {
-                        focustimes[generalName] += TimeSpan.FromSeconds(1);
+                        focustimes[previousWindowName] += focusTime;
                     }
                     else
                     {
-                        focustimes[generalName] = TimeSpan.FromSeconds(1);
+                        focustimes[previousWindowName] = focusTime;
                     }
                 }
+
+                // Update to the new window
+                currentWindow = foregroundWindow;
+                focusStartTime = DateTime.Now;
             }
         }
 
@@ -87,6 +68,21 @@ namespace ProgressTrackerLibrary.HelperMethods
         public void StopTracking()
         {
             timer.Stop();
+
+            if (currentWindow != IntPtr.Zero)
+            {
+                string currentWindowName = GetGeneralName(currentWindow);
+                TimeSpan focusTime = DateTime.Now - focusStartTime;
+
+                if (focustimes.ContainsKey(currentWindowName))
+                {
+                    focustimes[currentWindowName] += focusTime;
+                }
+                else
+                {
+                    focustimes[currentWindowName] = focusTime;
+                }
+            }
         }
 
         // Method to get the .exe name for the window 

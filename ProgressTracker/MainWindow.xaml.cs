@@ -32,6 +32,8 @@ namespace ProgressTracker
             InitializeComponent();
             DataContext = appList;
 
+            FileConnector.RecordEachDay();
+
             ReadDatabase();
             RefreshAppList();
             AssignDayToUI();
@@ -39,8 +41,6 @@ namespace ProgressTracker
             timeTracking = new TimeTracking();
 
             StartDatabaseUpdateTimer();
-            FileConnector.RecordEachDay();
-
             this.Closing += MainWindow_Closing;
         }
 
