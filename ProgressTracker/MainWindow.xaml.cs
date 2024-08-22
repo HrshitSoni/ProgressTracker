@@ -6,6 +6,7 @@ using ProgressTrackerLibrary.Models;
 using ProgressTrackerLibrary.HelperMethods;
 using ProgressTrackerLibrary.DatabasePopulator;
 using System.Windows.Threading;
+using System.Drawing;
 
 
 namespace ProgressTracker

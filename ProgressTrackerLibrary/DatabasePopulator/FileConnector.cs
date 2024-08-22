@@ -20,7 +20,6 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             return fileName.FullFilePath().LoadFile().ConvertToAppModel();
         }
 
-        // TODO - Save app to both the file
         // Method for saving the app to the file
         public static void SaveToAppFile(this AppModel app, string fileName)
         {
@@ -31,7 +30,6 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             appList.SaveAppListToFile(fileName);
         }
 
-        //TODO - Check if the app is present in both the file
         // Method for checking app in file to remove repetition of apps
         public static bool PresentInFile(this AppModel app,string fileName)
         {
@@ -51,7 +49,6 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             return false;
         }
 
-        // TODO - Need to remove app from both EachDayFile and app file
         // Method for removing app from the file
         public static void RemoveFromAppFile(this AppModel appModel,string fileName)
         {
@@ -73,7 +70,6 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             appList.SaveAppListToFile(fileName);
         }
 
-        //TODO - Update the time in the each day file
         // Method to update time in file of each day
         public static void UpdateAppTime(this AppModel appModel,string fileName)
         {
