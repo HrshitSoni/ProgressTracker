@@ -1,0 +1,58 @@
+﻿<Page x:Class="ProgressTracker.TimePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ProgressTracker"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="580"
+      Title="TimePage">
+
+    <Page.Resources>
+        <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#C33764" Offset="0.0"/>
+            <GradientStop Color="#1D2671" Offset="1.0"/>
+            </LinearGradientBrush>
+    </Page.Resources>
+    
+    <Grid Background="{StaticResource BackgroundBrush}">
+        <StackPanel Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <!-- Day display text box -->
+            <TextBlock x:Name="DayNameTextBox" Grid.Column="2" VerticalAlignment="Top" Height="37" Margin="05" Foreground="AliceBlue" FontWeight="SemiBold" FontSize="25" Text="Day"/>
+
+            <!-- Time StackPanel -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock x:Name="HourText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock Height="100" Width="18" Background="Transparent" Margin="5" Text=":" FontSize="70" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock x:Name="MinutesText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock Height="100" Width="18" Background="Transparent" Margin="5" Text=":" FontSize="70" TextAlignment="Center" FontWeight="SemiBold"/>
+                <TextBlock x:Name="SecondsText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+            </StackPanel>
+
+            <!-- Labels StackPanel -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <TextBlock Height="30" Width="100" Background="Transparent" Text="Hrs" TextAlignment="Center"  FontSize="25" FontWeight="Bold"/>
+                <TextBlock Height="30" Width="18" Background="Transparent" Margin="5"/>
+                <TextBlock Height="30" Width="100" Background="Transparent" Text="Mins" TextAlignment="Center"  FontSize="25" FontWeight="Bold"/>
+                <TextBlock Height="30" Width="18" Background="Transparent" Margin="5"/>
+                <TextBlock Height="30" Width="100" Background="Transparent" Text="Secs" TextAlignment="Center" FontSize="25" FontWeight="Bold"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!--Graph Button-->
+        <Button x:Name="GraphButton" Grid.Column="2" Height="50" Width="50" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40" BorderBrush="Transparent" Click="GraphButton_click">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid >
+                        <Ellipse>
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="pack://application:,,,/Images/GraphImage.jpg"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+</Page>

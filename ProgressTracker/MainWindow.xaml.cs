@@ -7,6 +7,7 @@ using ProgressTrackerLibrary.HelperMethods;
 using ProgressTrackerLibrary.DatabasePopulator;
 using System.Windows.Threading;
 using System.Drawing;
+using System.Diagnostics;
 
 
 namespace ProgressTracker
@@ -27,6 +28,7 @@ namespace ProgressTracker
         private string eachDayFileName = FileConnector.EachDayFile;
 
         private List<string> appNames;
+        public TimePage tp;
 
         public MainWindow()
         {
@@ -37,12 +39,14 @@ namespace ProgressTracker
 
             ReadDatabase();
             RefreshAppList();
-            AssignDayToUI();
 
             timeTracking = new TimeTracking();
 
             StartDatabaseUpdateTimer();
             this.Closing += MainWindow_Closing;
+
+            tp = new TimePage();
+            ShowTimePage();
         }
 
         private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
@@ -233,18 +237,14 @@ namespace ProgressTracker
                 {
                     TimeSpan time = TimeSpan.Zero;
                     TimeSpan.TryParse(appModel.activeTime,out time);
-
-                    HourText.Text = time.Hours.ToString("D2");
-                    MinutesText.Text = time.Minutes.ToString("D2");
-                    SecondsText.Text = time.Seconds.ToString("D2");
+                    tp.UpdateTime(time);
                 }
             }
         }
-
-        // Putting todays day in Ui
-        private void AssignDayToUI()
+        private void ShowTimePage()
         {
-            DayNameTextBox.Text = HelpingMethods.DayOfTheWeek();
+            DynamicContentFrame.Navigate(tp);
         }
+       
     }
 }
