@@ -1,4 +1,4 @@
-﻿using ProgressTrackerLibrary.HelperMethods;
+﻿         using ProgressTrackerLibrary.HelperMethods;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -20,7 +20,7 @@ namespace ProgressTracker
 
             AssignDayToUi();
 
-            gp = new GraphPage();
+            gp = new GraphPage(this);
         }
 
         private void GraphButton_click(object sender, RoutedEventArgs e)
@@ -42,16 +42,7 @@ namespace ProgressTracker
 
         private void ShowGraphPage()
         {
-            if(isGraphPage == false)
-            {
-                NavigationService.Navigate(gp);
-                isGraphPage = true;
-            }
-            else
-            {
-                NavigationService.GoBack();
-                isGraphPage = false;
-            }
+            NavigationService.Navigate(gp);
         }
     }
 }

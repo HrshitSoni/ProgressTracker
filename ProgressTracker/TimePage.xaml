@@ -10,9 +10,9 @@
 
     <Page.Resources>
         <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#C33764" Offset="0.0"/>
-            <GradientStop Color="#1D2671" Offset="1.0"/>
-            </LinearGradientBrush>
+            <GradientStop Color="#868F96 " Offset="0"/>
+            <GradientStop Color="#596164" Offset="1"/>
+        </LinearGradientBrush>
     </Page.Resources>
     
     <Grid Background="{StaticResource BackgroundBrush}">

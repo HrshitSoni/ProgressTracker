@@ -12,6 +12,7 @@ using System.Drawing.Imaging;
 using System.Windows.Controls;
 using ProgressTrackerLibrary.DatabasePopulator;
 using System.Globalization;
+using System.Windows.Media;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -111,6 +112,24 @@ namespace ProgressTrackerLibrary.HelperMethods
             }
 
             return dateTimes.OrderBy(date => date).Select(date => date.ToString("dd MMMM yyyy")).ToList();
+        }
+
+        public static void ColorTheClickedButtonDifferent(this Button button,Queue<Button>q)
+        {
+            if (q.Count != 0)
+            {
+                Button prevButton = q.Peek();
+                prevButton.Background = new SolidColorBrush(Colors.Transparent);
+                q.Dequeue();
+                q.Enqueue(button);
+            }
+            else
+            {
+                q.Enqueue(button);
+            }
+
+            Button currButton = q.Peek();
+            currButton.Background = new SolidColorBrush(Colors.Black);
         }
     }
 }

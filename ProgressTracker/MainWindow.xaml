@@ -5,12 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProgressTracker"
         mc:Ignorable="d"
-        Title="Progress Tracker" Height="550" Width="800" Icon="pack://application:,,,/Images/MainIcon.ico">
+        ResizeMode="CanMinimize"
+        WindowStyle="SingleBorderWindow"
+        Title="Progress Tracker" Height="580" Width="800" Icon="pack://application:,,,/Images/MainIcon.ico">
     <Window.Resources>
         <!-- Define a common LinearGradientBrush for reuse -->
         <LinearGradientBrush x:Key="BackgroundBrush" EndPoint="0,0" StartPoint="1,1">
-            <GradientStop Color="#C33764" Offset="0.0"/>
-            <GradientStop Color="#1D2671" Offset="1.0"/>
+            <GradientStop Color="#868F96 " Offset="0"/>
+            <GradientStop Color="#596164" Offset="1"/>
         </LinearGradientBrush>
     </Window.Resources>
 
@@ -19,7 +21,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition x:Name="ListViewColumn" Width="200"/>
             <ColumnDefinition x:Name ="ScrollBarColumn"  Width="20"/>
-            <ColumnDefinition Width="580"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Menu Button and Application Label StackPanel -->

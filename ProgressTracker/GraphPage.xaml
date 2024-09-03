@@ -5,18 +5,59 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ProgressTracker"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="550" d:DesignWidth="580"
       Title="GraphPage">
 
     <Page.Resources>
         <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#FDFCFB" Offset="0"/>
-            <GradientStop Color="#E2D1C3" Offset="0.5"/>
-            <GradientStop Color="#FDFCFB" Offset="1"/>
+            <GradientStop Color="#868F96 " Offset="0"/>
+            <GradientStop Color="#596164" Offset="1"/>
         </LinearGradientBrush>
     </Page.Resources>
-    
+
     <Grid Background="{StaticResource BackgroundBrush}">
-        
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="490"/>
+        </Grid.RowDefinitions>
+        <!-- Button to go back to time page -->
+        <Button x:Name="Back" Content="Back" Height="40" Width="100" FontSize="20" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,15,0,0" Click="Back_Click" Grid.Row="0"/>
+         
+        <!-- Grid for graph -->
+        <Grid Height="490" VerticalAlignment="Bottom" Grid.Row="1">
+            <Line X1="60" Y1="40" X2="60" Y2="440" Stroke="Black" StrokeThickness="2"/>
+            <Line X1="60" Y1="440" X2="480" Y2="440" Stroke="Black" StrokeThickness="2"/>
+            <TextBlock x:Name="DaysTextBlock" Height="30" Width="60"  VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="25,40" Text="Days" FontSize="20"/>
+            <TextBlock x:Name="HoursTextBlock" Height="30" Width="60" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="30,0,0,0" Text="Hours" FontSize="20"/>
+            
+            <!--Hours Text-->
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,40,0,0" Text="24" VerticalAlignment="Top" FontSize="16"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,90,0,0" Text="21" VerticalAlignment="Top" FontSize="16"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,135,0,0" Text="18" VerticalAlignment="Top" FontSize="16"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,180,0,0" Text="15" VerticalAlignment="Top" FontSize="16"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,225,0,0" Text="12" VerticalAlignment="Top" FontSize="16"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,270,0,0" Text="9" VerticalAlignment="Top" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,315,0,0" Text="6" VerticalAlignment="Top" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,370,0,0" Text="3" VerticalAlignment="Top" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" Width="20" Margin="30,425,0,0" Text="0" VerticalAlignment="Top" FontSize="16" TextAlignment="Center"/>
+             
+            <!--Days Name Text-->
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="430,0,0,30" Text="Sun" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="70,0,0,30" Text="Mon" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="130,0,0,30" Text="Tue" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="190,0,0,30" Text="Wed" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="250,0,0,30" Text="Thu" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="310,0,0,30" Text="Fri" FontSize="16" TextAlignment="Center"/>
+            <TextBlock Height="17" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="50" Margin="370,0,0,30" Text="Sat" FontSize="16" TextAlignment="Center"/>
+
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="70,0,0,52" Background="Transparent"/>
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="130,0,0,52" Background="Transparent"/>
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="190,0,0,52" Background="Transparent"/>
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="250,0,0,52" Background="Transparent"/>
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="310,0,0,52" Background="Transparent"/>
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="370,0,0,52" Background="Transparent"/>
+            <ProgressBar Height="17" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Margin="430,0,0,52" Background="Transparent"/>
+        </Grid>
     </Grid>
 </Page>

@@ -18,7 +18,7 @@ namespace ProgressTracker
         private bool isCollapsed = false;
 
         // List of Applications as Clickable Buttons
-        private static ObservableCollection<Button> appList = new ObservableCollection<Button>();
+        private static ObservableCollection<Button> appList;
 
         private TimeTracking timeTracking;
 
@@ -29,17 +29,19 @@ namespace ProgressTracker
 
         private List<string> appNames;
         public TimePage tp;
+        private static Queue<Button> que;
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = appList;
-
+            appList = new ObservableCollection<Button>();
             FileConnector.RecordEachDay();
 
             ReadDatabase();
             RefreshAppList();
 
+            que = new Queue<Button>();
             timeTracking = new TimeTracking();
 
             StartDatabaseUpdateTimer();
@@ -229,6 +231,7 @@ namespace ProgressTracker
 
             Dispatcher.BeginInvoke(new Action(()=>{
                 AppList.SelectedItem = null;
+                button.ColorTheClickedButtonDifferent(que);
             }));
 
             foreach(AppModel appModel in eachDayFileName.ReadFile())
@@ -245,6 +248,5 @@ namespace ProgressTracker
         {
             DynamicContentFrame.Navigate(tp);
         }
-       
     }
 }

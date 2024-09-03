@@ -20,9 +20,28 @@ namespace ProgressTracker
     /// </summary>
     public partial class GraphPage : Page
     {
-        public GraphPage()
+        private TimePage tp;
+        public GraphPage(TimePage timepage)
         {
             InitializeComponent();
+
+            tp = timepage;        }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            if(NavigationService.CanGoBack == true)
+            {
+                NavigationService.GoBack();
+            }
+            else
+            {
+                NavigationService.Navigate(tp);
+            }
+        }
+
+        private void MakeGraph()
+        {
+
         }
     }
 }
