@@ -35,6 +35,7 @@ namespace ProgressTracker
         {
             Dictionary<string, TimeSpan> appTimeData = appModel.GetAppTimeData();
             const double maxMinutes = 24 * 60;
+
             foreach (var entry in appTimeData)
             {
                 Debug.WriteLine($"{entry.Key}: {entry.Value}");
@@ -50,10 +51,8 @@ namespace ProgressTracker
                     if (appTimeData.ContainsKey(dayName))
                     {
                         var timeSpan = appTimeData[dayName];
-                        Debug.WriteLine($"Retrieved TimeSpan for {dayName}: {timeSpan}");
                         double percentage = (timeSpan.TotalMinutes / maxMinutes) * 100;
                         progressBar.Value = percentage;
-                        Debug.WriteLine($"Calculated Percentage for {dayName}: {percentage}");
                     }
                     else
                     {
