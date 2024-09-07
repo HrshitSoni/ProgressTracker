@@ -13,6 +13,16 @@ namespace ProgressTrackerLibrary.DatabasePopulator
         public const string appFile = "AppFile.csv";
         public const string dayRecord = "dayRecord.csv";
         public static string EachDayFile = $"{HelpingMethods.DayOfTheWeek()}_AppFile.csv";
+        public static List<string> fileNamesList = new()
+        {
+                "Sunday_AppFile.csv",
+                "Monday_AppFile.csv",
+                "Tuesday_AppFile.csv",
+                "Wednesday_AppFile.csv",
+                "Thursday_AppFile.csv",
+                "Friday_AppFile.csv",
+                "Saturday_AppFile.csv"
+        };
 
         // Method for loading the file in form of list<appModel>
         public static List<AppModel> ReadFile(this string fileName)
@@ -142,6 +152,7 @@ namespace ProgressTrackerLibrary.DatabasePopulator
             {
                 if (!app.PresentInFile(EachDayFile))
                 {
+                    app.DayOfTheWeek = HelpingMethods.DayOfTheWeek();
                     eachDayFile.Add(app);
                 }
             }
@@ -150,17 +161,6 @@ namespace ProgressTrackerLibrary.DatabasePopulator
 
         public static void DeleteAllDayFileAfter7Days()
         {
-            List<string> fileNamesList = new()
-            {
-                "Sunday_AppFile.csv",
-                "Monday_AppFile.csv",
-                "Tuesday_AppFile.csv",
-                "Wednesday_AppFile.csv",
-                "Thursday_AppFile.csv",
-                "Friday_AppFile.csv",
-                "Saturday_AppFile.csv"
-            };
-
             foreach(string filename in fileNamesList)
             {
                 string fullpath = filename.FullFilePath();

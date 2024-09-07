@@ -23,11 +23,11 @@
 
             <!-- Time StackPanel -->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock x:Name="HourText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock x:Name="HourText" Height="100" Width="100" Background="Transparent" Text="00" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
                 <TextBlock Height="100" Width="18" Background="Transparent" Margin="5" Text=":" FontSize="70" TextAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock x:Name="MinutesText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock x:Name="MinutesText" Height="100" Width="100" Background="Transparent" Text="00" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
                 <TextBlock Height="100" Width="18" Background="Transparent" Margin="5" Text=":" FontSize="70" TextAlignment="Center" FontWeight="SemiBold"/>
-                <TextBlock x:Name="SecondsText" Height="100" Width="100" Background="Transparent" Text="12" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
+                <TextBlock x:Name="SecondsText" Height="100" Width="100" Background="Transparent" Text="00" TextAlignment="Center" TextWrapping="Wrap" FontSize="75"/>
             </StackPanel>
 
             <!-- Labels StackPanel -->

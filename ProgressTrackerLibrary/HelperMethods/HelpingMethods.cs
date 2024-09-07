@@ -13,6 +13,8 @@ using System.Windows.Controls;
 using ProgressTrackerLibrary.DatabasePopulator;
 using System.Globalization;
 using System.Windows.Media;
+using System.Data;
+using ProgressTrackerLibrary.Database;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -131,5 +133,44 @@ namespace ProgressTrackerLibrary.HelperMethods
             Button currButton = q.Peek();
             currButton.Background = new SolidColorBrush(Colors.Black);
         }
+
+        public static Dictionary<string, TimeSpan> GetAppTimeData(this AppModel appModel)
+        {
+            var appTimeData = new Dictionary<string, TimeSpan>();
+
+            foreach (var fileName in FileConnector.fileNamesList)
+            {
+                string filePath = fileName.FullFilePath();
+                if (File.Exists(filePath))
+                {
+                    foreach (var app in fileName.ReadFile())
+                    {
+                        if (appModel.appName == app.appName)
+                        {
+                            if (appTimeData.ContainsKey(app.DayOfTheWeek))
+                            {
+                                TimeSpan currentTime;
+                                TimeSpan.TryParse(appTimeData[app.DayOfTheWeek].ToString(), out currentTime);
+                                appTimeData[app.DayOfTheWeek] = currentTime + TimeSpan.Parse(app.activeTime);
+                            }
+                            else
+                            {
+                                appTimeData[app.DayOfTheWeek] = TimeSpan.Parse(app.activeTime);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return appTimeData;
+        }
+
+        public static string DayOfTheWeekFromFileName(this string fileName)
+        {
+            string dayName = Path.GetFileNameWithoutExtension(fileName).Split('_')[0];
+
+            return dayName;
+        }
+
     }
 }

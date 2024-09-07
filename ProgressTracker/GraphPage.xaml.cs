@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ProgressTrackerLibrary.DatabasePopulator;
+using ProgressTrackerLibrary.HelperMethods;
+using ProgressTrackerLibrary.Models;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ProgressTracker
 {
@@ -20,12 +13,15 @@ namespace ProgressTracker
     /// </summary>
     public partial class GraphPage : Page
     {
-        private TimePage tp;
-        public GraphPage(TimePage timepage)
+        private AppModel appModel;
+        public GraphPage(AppModel model)
         {
             InitializeComponent();
 
-            tp = timepage;        }
+            appModel = model;
+
+            MakeGraph(appModel);
+        }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
@@ -33,15 +29,38 @@ namespace ProgressTracker
             {
                 NavigationService.GoBack();
             }
-            else
-            {
-                NavigationService.Navigate(tp);
-            }
         }
 
-        private void MakeGraph()
+        public void MakeGraph(AppModel appModel)
         {
+            Dictionary<string, TimeSpan> appTimeData = appModel.GetAppTimeData();
+            const double maxMinutes = 24 * 60;
+            foreach (var entry in appTimeData)
+            {
+                Debug.WriteLine($"{entry.Key}: {entry.Value}");
+            }
+            foreach (var fileName in FileConnector.fileNamesList)
+            {
+                string dayName = fileName.DayOfTheWeekFromFileName();
 
+                var progressBar = FindName($"ProgressBar_{dayName}") as ProgressBar;
+
+                if (progressBar != null)
+                {
+                    if (appTimeData.ContainsKey(dayName))
+                    {
+                        var timeSpan = appTimeData[dayName];
+                        Debug.WriteLine($"Retrieved TimeSpan for {dayName}: {timeSpan}");
+                        double percentage = (timeSpan.TotalMinutes / maxMinutes) * 100;
+                        progressBar.Value = percentage;
+                        Debug.WriteLine($"Calculated Percentage for {dayName}: {percentage}");
+                    }
+                    else
+                    {
+                        progressBar.Value = 0;
+                    }
+                }
+            }  
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿         using ProgressTrackerLibrary.HelperMethods;
+using ProgressTrackerLibrary.Models;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -11,25 +12,29 @@ namespace ProgressTracker
     /// </summary>
     public partial class TimePage : Page
     {
-        private GraphPage gp;
-        private bool isGraphPage = false;
+        private AppModel appModel;
 
-        public TimePage()
+        public TimePage(AppModel model)
         {
             InitializeComponent();
 
+            appModel = model;
             AssignDayToUi();
-
-            gp = new GraphPage(this);
+            UpdateTime(appModel);
         }
 
         private void GraphButton_click(object sender, RoutedEventArgs e)
         {
-            ShowGraphPage();
+            ShowGraphPage(appModel);
         }
 
-        public void UpdateTime(TimeSpan time)
+        public void UpdateTime(AppModel appModel)
         {
+            TimeSpan time = TimeSpan.Zero;
+            if (appModel != null)
+            { 
+                TimeSpan.TryParse(appModel.activeTime, out time);
+            }
             HourText.Text = time.Hours.ToString("D2");
             MinutesText.Text = time.Minutes.ToString("D2");
             SecondsText.Text = time.Seconds.ToString("D2");
@@ -40,9 +45,18 @@ namespace ProgressTracker
             DayNameTextBox.Text = HelpingMethods.DayOfTheWeek();
         }
 
-        private void ShowGraphPage()
+        public void ShowGraphPage(AppModel appModel)
         {
-            NavigationService.Navigate(gp);
+            if(appModel is not null)
+            {
+                GraphPage gp = new GraphPage(appModel);
+                NavigationService.Navigate(gp);
+            }
+            else
+            {
+                MessageBox.Show("Please Select an application of your choice", "Caution");
+                return;
+            }
         }
     }
 }

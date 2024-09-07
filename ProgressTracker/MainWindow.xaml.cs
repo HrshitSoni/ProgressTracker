@@ -8,6 +8,7 @@ using ProgressTrackerLibrary.DatabasePopulator;
 using System.Windows.Threading;
 using System.Drawing;
 using System.Diagnostics;
+using System.Windows.Navigation;
 
 
 namespace ProgressTracker
@@ -28,7 +29,8 @@ namespace ProgressTracker
         private string eachDayFileName = FileConnector.EachDayFile;
 
         private List<string> appNames;
-        public TimePage tp;
+        private TimePage tp;
+        private GraphPage gp;
         private static Queue<Button> que;
 
         public MainWindow()
@@ -47,7 +49,7 @@ namespace ProgressTracker
             StartDatabaseUpdateTimer();
             this.Closing += MainWindow_Closing;
 
-            tp = new TimePage();
+            tp = new TimePage(null);
             ShowTimePage();
         }
 
@@ -216,6 +218,7 @@ namespace ProgressTracker
 
                 // Remove the button from the UI list
                 appList.Remove(button);
+                tp.UpdateTime(null);
             }
             else
             {
@@ -238,9 +241,9 @@ namespace ProgressTracker
             {
                 if(app.appName == appModel.appName)
                 {
-                    TimeSpan time = TimeSpan.Zero;
-                    TimeSpan.TryParse(appModel.activeTime,out time);
-                    tp.UpdateTime(time);
+                    tp = new TimePage(appModel);
+                    DynamicContentFrame.Navigate(tp);
+                    break;
                 }
             }
         }
