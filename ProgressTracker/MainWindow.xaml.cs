@@ -19,31 +19,27 @@ namespace ProgressTracker
         private bool isCollapsed = false;
 
         // List of Applications as Clickable Buttons
-        private static ObservableCollection<Button> appList;
+        private ObservableCollection<Button> appList = new ObservableCollection<Button>();
 
         private TimeTracking timeTracking;
 
-        private DispatcherTimer DatabaseUpdateTimer;
+        private DispatcherTimer DatabaseUpdateTimer = new DispatcherTimer();
 
         private string appfileName = FileConnector.appFile;
         private string eachDayFileName = FileConnector.EachDayFile;
 
-        private List<string> appNames;
         private TimePage tp;
-        private GraphPage gp;
-        private static Queue<Button> que;
+        private Queue<Button> que = new Queue<Button>();
 
         public MainWindow()
         {
             InitializeComponent();
             DataContext = appList;
-            appList = new ObservableCollection<Button>();
             FileConnector.RecordEachDay();
 
             ReadDatabase();
             RefreshAppList();
 
-            que = new Queue<Button>();
             timeTracking = new TimeTracking();
 
             StartDatabaseUpdateTimer();
@@ -61,7 +57,6 @@ namespace ProgressTracker
         // Timer for updating the database 
         public void StartDatabaseUpdateTimer()
         {
-            DatabaseUpdateTimer = new DispatcherTimer();
             DatabaseUpdateTimer.Interval += TimeSpan.FromSeconds(2);
             DatabaseUpdateTimer.Tick += DatabaseUpdateTimer_Tick;
             DatabaseUpdateTimer.Start();
@@ -177,8 +172,15 @@ namespace ProgressTracker
                
             };
 
-            string filePath = app.appLogoPath;
-            appLogo.Source = filePath.GetImage().ConvertBitmapToImageSource();
+            string filePath = app.appLogoPath??"";
+            if (String.IsNullOrEmpty(filePath) != true)
+            {
+                appLogo.Source = filePath.GetImage()?.ConvertBitmapToImageSource();
+            }
+            else
+            {
+                appLogo.Source = null;
+            }
    
 
             StackPanel panel = new StackPanel
@@ -210,7 +212,7 @@ namespace ProgressTracker
             if (AppList.SelectedItem != null)
             {
                 var button = (Button)AppList.SelectedItem;
-                var app = button.ExtractAppFromButton();
+                AppModel? app = button.ExtractAppFromButton();
 
                 // Remove the app from both files
                 app.RemoveFromAppFile(appfileName);
@@ -239,7 +241,7 @@ namespace ProgressTracker
 
             foreach(AppModel appModel in eachDayFileName.ReadFile())
             {
-                if(app.appName == appModel.appName)
+                if(app?.appName == appModel.appName)
                 {
                     tp = new TimePage(appModel);
                     DynamicContentFrame.Navigate(tp);

@@ -12,15 +12,24 @@ namespace ProgressTracker
     /// </summary>
     public partial class TimePage : Page
     {
-        private AppModel appModel;
+        private AppModel? appModel;
 
-        public TimePage(AppModel model)
+        public TimePage(AppModel? model)
         {
             InitializeComponent();
 
             appModel = model;
             AssignDayToUi();
-            UpdateTime(appModel);
+            if (appModel != null)
+            {
+                UpdateTime(appModel);
+            }
+        }
+
+        public TimePage()
+        {
+            InitializeComponent();
+            AssignDayToUi();
         }
 
         private void GraphButton_click(object sender, RoutedEventArgs e)
@@ -28,11 +37,11 @@ namespace ProgressTracker
             ShowGraphPage(appModel);
         }
 
-        public void UpdateTime(AppModel appModel)
+        public void UpdateTime(AppModel? appModel)
         {
             TimeSpan time = TimeSpan.Zero;
             if (appModel != null)
-            { 
+            {
                 TimeSpan.TryParse(appModel.activeTime, out time);
             }
             HourText.Text = time.Hours.ToString("D2");
@@ -45,17 +54,16 @@ namespace ProgressTracker
             DayNameTextBox.Text = HelpingMethods.DayOfTheWeek();
         }
 
-        public void ShowGraphPage(AppModel appModel)
+        public void ShowGraphPage(AppModel? appModel)
         {
-            if(appModel is not null)
+            if (appModel != null)
             {
                 GraphPage gp = new GraphPage(appModel);
                 NavigationService.Navigate(gp);
             }
             else
             {
-                MessageBox.Show("Please Select an application of your choice", "Caution");
-                return;
+                MessageBox.Show("Please select an application of your choice", "Caution");
             }
         }
     }

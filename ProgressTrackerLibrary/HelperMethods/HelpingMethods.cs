@@ -21,7 +21,7 @@ namespace ProgressTrackerLibrary.HelperMethods
     public static class HelpingMethods
     {
         // Opening .exe files dialog box with folder path being the program files
-        public static AppModel  OpenAppsDialogBox_AddApp()
+        public static AppModel? OpenAppsDialogBox_AddApp()
         {
             var dialogBox = new OpenFileDialog
             {
@@ -50,11 +50,15 @@ namespace ProgressTrackerLibrary.HelperMethods
         }
 
         // Extracting Icon of app from .exe file
-        public static Bitmap GetImage(this string path)
+        public static Bitmap? GetImage(this string path)
         {
-            Icon icon = Icon.ExtractAssociatedIcon(path);
-
-            Bitmap image = icon.ToBitmap();
+            if (string.IsNullOrEmpty(path)) return null;
+            Icon? icon = Icon.ExtractAssociatedIcon(path);
+            Bitmap? image = null;
+            if (icon is not null)
+            {
+                image = icon.ToBitmap(); 
+            }
 
             return image;
         }
@@ -77,7 +81,7 @@ namespace ProgressTrackerLibrary.HelperMethods
         }
 
         // Method to extract app from the button in the app List
-        public static AppModel ExtractAppFromButton(this Button button)
+        public static AppModel? ExtractAppFromButton(this Button button)
         {
             StackPanel panel = (StackPanel)button.Content;
             TextBlock textBlock = (TextBlock)panel.Children[1];
@@ -145,17 +149,21 @@ namespace ProgressTrackerLibrary.HelperMethods
                 {
                     foreach (var app in fileName.ReadFile())
                     {
-                        if (appModel.appName == app.appName)
+                        // Check for null values before accessing appName, DayOfTheWeek, or activeTime
+                        if (appModel.appName == app?.appName && !string.IsNullOrEmpty(app?.DayOfTheWeek) && !string.IsNullOrEmpty(app?.activeTime))
                         {
-                            if (appTimeData.ContainsKey(app.DayOfTheWeek))
+                            // Try parsing app.activeTime to avoid nullable errors
+                            if (TimeSpan.TryParse(app.activeTime, out TimeSpan appTime))
                             {
-                                TimeSpan currentTime;
-                                TimeSpan.TryParse(appTimeData[app.DayOfTheWeek].ToString(), out currentTime);
-                                appTimeData[app.DayOfTheWeek] = currentTime + TimeSpan.Parse(app.activeTime);
-                            }
-                            else
-                            {
-                                appTimeData[app.DayOfTheWeek] = TimeSpan.Parse(app.activeTime);
+                                if (appTimeData.ContainsKey(app.DayOfTheWeek))
+                                {
+                                    TimeSpan currentTime = appTimeData[app.DayOfTheWeek];
+                                    appTimeData[app.DayOfTheWeek] = currentTime + appTime;
+                                }
+                                else
+                                {
+                                    appTimeData[app.DayOfTheWeek] = appTime;
+                                }
                             }
                         }
                     }
@@ -164,6 +172,7 @@ namespace ProgressTrackerLibrary.HelperMethods
 
             return appTimeData;
         }
+
 
         public static string DayOfTheWeekFromFileName(this string fileName)
         {

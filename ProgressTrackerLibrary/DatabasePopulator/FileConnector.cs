@@ -60,7 +60,7 @@ namespace ProgressTrackerLibrary.DatabasePopulator
         }
 
         // Method for removing app from the file
-        public static void RemoveFromAppFile(this AppModel appModel,string fileName)
+        public static void RemoveFromAppFile(this AppModel? appModel,string fileName)
         {
             List<AppModel> appList = fileName.ReadFile();
 

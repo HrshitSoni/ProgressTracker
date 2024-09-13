@@ -14,7 +14,7 @@ namespace ProgressTrackerLibrary.Models
         public required string appName{ get; set; }
         public  string? appLogoPath { get; set; }
         public string? activeTime { get; set; }
-        public string DayOfTheWeek { get; set; }
+        public string? DayOfTheWeek { get; set; }
 
         public AppModel()
         {
