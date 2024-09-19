@@ -24,7 +24,8 @@ namespace ProgressTrackerLibrary.HelperMethods
         public TimeTracking()
         {
             focustimes = new Dictionary<string, TimeSpan>();
-            timer.Interval = TimeSpan.FromSeconds(1); 
+            timer.Interval = TimeSpan.FromSeconds(1);
+            currentWindow = IntPtr.Zero;
             timer.Tick += Timer_Elapsed;
             timer.Start();
             focusStartTime = DateTime.Now;
@@ -32,15 +33,17 @@ namespace ProgressTrackerLibrary.HelperMethods
 
         private void Timer_Elapsed(object? sender, EventArgs e)
         {
+            // Get the current foreground window
             IntPtr foregroundWindow = GetForegroundWindow();
 
-            if (foregroundWindow != currentWindow)
+            // Check if the window has changed or if no window (desktop) is in focus
+            if (foregroundWindow != currentWindow || foregroundWindow == IntPtr.Zero)
             {
+                // Only record the time if there was a valid previous window
                 if (currentWindow != IntPtr.Zero)
                 {
-                    string previousWindowName = GetGeneralName(currentWindow);
                     TimeSpan focusTime = DateTime.Now - focusStartTime;
-
+                    string previousWindowName = GetGeneralName(currentWindow);
                     if (!string.IsNullOrEmpty(previousWindowName))
                     {
                         if (focustimes.ContainsKey(previousWindowName))
@@ -54,8 +57,34 @@ namespace ProgressTrackerLibrary.HelperMethods
                     }
                 }
 
-                currentWindow = foregroundWindow;
+                // Check if the new window process is valid (i.e., not closed)
+                if (foregroundWindow != IntPtr.Zero && !IsWindowClosed(foregroundWindow))
+                {
+                    currentWindow = foregroundWindow;
+                }
+                else
+                {
+                    currentWindow = IntPtr.Zero;  // Set to desktop if no valid window exists
+                }
+
+                // Reset the start time to the current time for the new window
                 focusStartTime = DateTime.Now;
+            }
+        }
+
+        private bool IsWindowClosed(IntPtr window)
+        {
+            GetWindowThreadProcessId(window, out uint processId);
+            try
+            {
+                Process process = Process.GetProcessById((int)processId);
+                // If the process is still running, return false
+                return process.HasExited;
+            }
+            catch (ArgumentException)
+            {
+                // If the process doesn't exist anymore, consider the window as closed
+                return true;
             }
         }
 

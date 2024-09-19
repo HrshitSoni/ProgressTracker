@@ -57,7 +57,7 @@ namespace ProgressTracker
         // Timer for updating the database 
         public void StartDatabaseUpdateTimer()
         {
-            DatabaseUpdateTimer.Interval += TimeSpan.FromSeconds(2);
+            DatabaseUpdateTimer.Interval += TimeSpan.FromSeconds(1);
             DatabaseUpdateTimer.Tick += DatabaseUpdateTimer_Tick;
             DatabaseUpdateTimer.Start();
         }
