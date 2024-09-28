@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Management;
 using System.IO;
 using System.Windows.Threading;
+using System.Collections.Concurrent;
 
 namespace ProgressTrackerLibrary.HelperMethods
 {
@@ -19,11 +20,12 @@ namespace ProgressTrackerLibrary.HelperMethods
         private DispatcherTimer timer = new DispatcherTimer();
         private IntPtr currentWindow;
         private DateTime focusStartTime;
-        public Dictionary<string, TimeSpan> focustimes;
+        public ConcurrentDictionary<string, TimeSpan> focustimes;
+
 
         public TimeTracking()
         {
-            focustimes = new Dictionary<string, TimeSpan>();
+            focustimes = new ConcurrentDictionary<string, TimeSpan>();
             timer.Interval = TimeSpan.FromSeconds(1);
             currentWindow = IntPtr.Zero;
             timer.Tick += Timer_Elapsed;
@@ -33,43 +35,32 @@ namespace ProgressTrackerLibrary.HelperMethods
 
         private void Timer_Elapsed(object? sender, EventArgs e)
         {
+            DateTime now = DateTime.Now;
+            // Calculate the time elapsed since the last tick
+            TimeSpan delta = now - focusStartTime;
+            focusStartTime = now;
+
             // Get the current foreground window
             IntPtr foregroundWindow = GetForegroundWindow();
 
-            // Check if the window has changed or if no window (desktop) is in focus
-            if (foregroundWindow != currentWindow || foregroundWindow == IntPtr.Zero)
+            if (foregroundWindow != IntPtr.Zero)
             {
-                // Only record the time if there was a valid previous window
-                if (currentWindow != IntPtr.Zero)
+                string currentAppName = GetGeneralName(foregroundWindow);
+                if (!string.IsNullOrEmpty(currentAppName))
                 {
-                    TimeSpan focusTime = DateTime.Now - focusStartTime;
-                    string previousWindowName = GetGeneralName(currentWindow);
-                    if (!string.IsNullOrEmpty(previousWindowName))
+                    if (focustimes.ContainsKey(currentAppName))
                     {
-                        if (focustimes.ContainsKey(previousWindowName))
-                        {
-                            focustimes[previousWindowName] += focusTime;
-                        }
-                        else
-                        {
-                            focustimes[previousWindowName] = focusTime;
-                        }
+                        focustimes[currentAppName] += delta;
+                    }
+                    else
+                    {
+                        focustimes[currentAppName] = delta;
                     }
                 }
-
-                // Check if the new window process is valid (i.e., not closed)
-                if (foregroundWindow != IntPtr.Zero && !IsWindowClosed(foregroundWindow))
-                {
-                    currentWindow = foregroundWindow;
-                }
-                else
-                {
-                    currentWindow = IntPtr.Zero;  // Set to desktop if no valid window exists
-                }
-
-                // Reset the start time to the current time for the new window
-                focusStartTime = DateTime.Now;
             }
+
+            // Update the current window
+            currentWindow = foregroundWindow;
         }
 
         private bool IsWindowClosed(IntPtr window)

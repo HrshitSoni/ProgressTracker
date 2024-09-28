@@ -149,10 +149,10 @@ namespace ProgressTrackerLibrary.HelperMethods
                 {
                     foreach (var app in fileName.ReadFile())
                     {
-                        // Check for null values before accessing appName, DayOfTheWeek, or activeTime
+                        
                         if (appModel.appName == app?.appName && !string.IsNullOrEmpty(app?.DayOfTheWeek) && !string.IsNullOrEmpty(app?.activeTime))
                         {
-                            // Try parsing app.activeTime to avoid nullable errors
+                            
                             if (TimeSpan.TryParse(app.activeTime, out TimeSpan appTime))
                             {
                                 if (appTimeData.ContainsKey(app.DayOfTheWeek))

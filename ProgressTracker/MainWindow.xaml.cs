@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Drawing;
 using System.Diagnostics;
 using System.Windows.Navigation;
+using System.Collections.Concurrent;
 
 
 namespace ProgressTracker
@@ -57,7 +58,7 @@ namespace ProgressTracker
         // Timer for updating the database 
         public void StartDatabaseUpdateTimer()
         {
-            DatabaseUpdateTimer.Interval += TimeSpan.FromSeconds(1);
+            DatabaseUpdateTimer.Interval = TimeSpan.FromSeconds(2);
             DatabaseUpdateTimer.Tick += DatabaseUpdateTimer_Tick;
             DatabaseUpdateTimer.Start();
         }
@@ -65,7 +66,7 @@ namespace ProgressTracker
         // update Database from focusTimes dictionary
         private void DatabaseUpdateTimer_Tick(object? sender, EventArgs e)
         {
-            Dictionary<string,TimeSpan> focusTimes = timeTracking.focustimes;
+            ConcurrentDictionary<string,TimeSpan> focusTimes = timeTracking.focustimes;
             foreach(var nameTimePair in focusTimes)
             {
                 foreach(AppModel app in eachDayFileName.ReadFile())
