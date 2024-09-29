@@ -17,6 +17,7 @@ Progress Tracker is a WPF application that tracks and analyzes daily usage of va
 - **Data Lifecycle**: Data is stored for 7 days and deleted automatically, ensuring lightweight and fresh information.
 
 ## **Screenshots**
+![Screenshot 2024-09-29 203736](https://github.com/user-attachments/assets/5d338f27-c88b-4ade-8572-fe4839bc0301)
 
 ![Screenshot 2024-09-29 203001](https://github.com/user-attachments/assets/1ed0f809-de05-48f0-93d7-e8efaff2a2f4)
 
@@ -26,3 +27,7 @@ Progress Tracker is a WPF application that tracks and analyzes daily usage of va
 - **WPF** for building the user interface
 - **XAML** for designing the UI
 - **CSV files** for data storage
+
+## **Future Features**
+- **Notifications** Notify users/user's parents when they exceed set time limits for specific apps.
+- **Cloud Backup** Option to back up usage data to a cloud service.
